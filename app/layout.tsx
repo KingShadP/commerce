@@ -2,12 +2,24 @@ import { CartProvider } from "components/cart/cart-context";
 import Header from "components/Header";
 import SovereignWebGLStage from "components/SovereignWebGLStage";
 import { WelcomeToast } from "components/welcome-toast";
-import { GeistSans } from "geist/font/sans";
+import { Outfit, Playfair_Display } from "next/font/google";
 import { getCart } from "lib/shopify";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { baseUrl } from "lib/utils";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400", "500", "600", "700"],
+});
 
 const { SITE_NAME } = process.env;
 
@@ -39,7 +51,7 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="en" className={`${GeistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${outfit.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#0A0908] text-[#F5F3EF] relative selection:bg-[#C5A880]/30 selection:text-white overflow-x-hidden">
         <CartProvider cartPromise={cart}>
           {/* Animated 3D WebGL Backdrop */}

@@ -70,18 +70,18 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 font-sans">
       
       {/* Dynamic System OS Control Center Toggles */}
-      <div className="glass-panel p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 border border-white/5 select-none font-mono">
+      <div className="glass-panel p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 border border-white/5 select-none">
         
         {/* Left: Tension Filter Segment tabs */}
-        <div className="flex flex-wrap gap-2 text-[8.5px] tracking-[2px] uppercase">
+        <div className="flex flex-wrap gap-2 text-[8.5px] tracking-[2px] uppercase font-bold">
           {[
             { id: "all", label: "ALL UNITS" },
-            { id: "base", label: "BASE // LOW_TENSION" },
-            { id: "sculpt", label: "SCULPT // MID_RECOVERY" },
-            { id: "compress", label: "COMPRESS // HIGH_SHAPE" }
+            { id: "base", label: "BASE / LOW TENSION" },
+            { id: "sculpt", label: "SCULPT / MID RECOVERY" },
+            { id: "compress", label: "COMPRESS / HIGH SHAPE" }
           ].map((tab) => {
             const isSelected = tensionFilter === tab.id;
             return (
@@ -109,7 +109,7 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>[SYS: PHOTO_DECK]</span>
+            <span>Photo Deck</span>
           </button>
           <button
             onClick={() => setViewMode("blueprint")}
@@ -118,7 +118,7 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
-            <span>[SYS: BLUEPRINT_DATA]</span>
+            <span>Blueprint Data</span>
           </button>
         </div>
       </div>
@@ -130,9 +130,9 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="py-24 text-center font-mono text-[9px] text-skims-sand/30 tracking-[3px] uppercase"
+            className="py-24 text-center text-[9px] text-skims-sand/30 tracking-[3px] uppercase font-sans"
           >
-            // FILTER RESULT: EMPTY SET RECOVERED
+            No products found matching this filter
           </motion.div>
         ) : viewMode === "photo" ? (
           /* Standard 3D card deck grid layout */
@@ -156,7 +156,7 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 font-mono text-[10px]"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-[10px] font-sans"
           >
             {filteredProducts.map((product) => {
               // Extract colors from options
@@ -174,7 +174,7 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
               return (
                 <div
                   key={product.id}
-                  className="bg-black/60 border border-skims-accent/20 p-5 rounded-2xl relative flex flex-col justify-between aspect-[3/4] text-left hover:border-skims-accent transition-colors shadow-2xl overflow-hidden"
+                  className="bg-black/60 border border-skims-accent/20 p-5 rounded-2xl relative flex flex-col justify-between aspect-[3/4] text-left hover:border-skims-accent transition-colors shadow-2xl overflow-hidden font-sans"
                 >
                   {/* Fine HUD Grid Backdrop */}
                   <div className="absolute inset-0 bg-grid-pattern opacity-[0.06] pointer-events-none" />
@@ -187,8 +187,8 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
 
                   {/* Top HUD values */}
                   <div className="flex justify-between items-center text-[7px] text-skims-sand/30 tracking-[2px] uppercase">
-                    <span>GRID NODE // {product.id}</span>
-                    <span className="text-skims-accent">TENSION: {getTensionScore(product.handle)}</span>
+                    <span>SKU: {product.id}</span>
+                    <span className="text-skims-accent">Tension: {getTensionScore(product.handle)}</span>
                   </div>
 
                   {/* Product title specs */}
@@ -198,23 +198,23 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
                         {product.title}
                       </h3>
                       <p className="text-[8px] text-skims-accent uppercase tracking-[1px]">
-                        HUE LAYER // {specColor.toUpperCase()}
+                        Color: {specColor.toUpperCase()}
                       </p>
                     </div>
 
                     {/* Spec log details block */}
                     <div className="bg-white/[0.02] border border-white/5 p-3 space-y-2 text-[8px] text-skims-sand/50 uppercase tracking-[1px]">
-                      <div>[SPECS_01] Woven Modal stretch blend</div>
-                      <div>[SPECS_02] DOUBLE-STITCHED COOLDOWN FLATLOCK</div>
-                      <div>[SPECS_03] STRETCH RATIO RETENTION: 2.5X AXIS</div>
-                      <div>[SPECS_04] THICKNESS FACTOR: {product.handle.includes("hoodie") ? "420 GSM" : "180 GSM"}</div>
+                      <div>Material: Woven Modal stretch blend</div>
+                      <div>Seams: Double-stitched flatlock</div>
+                      <div>Stretch: 2.5x stretch retention</div>
+                      <div>Weight: {product.handle.includes("hoodie") ? "420 GSM" : "180 GSM"}</div>
                     </div>
                   </div>
 
                   {/* Size registry buttons */}
                   <div className="space-y-3 pt-4 border-t border-white/5">
                     <span className="text-[7.5px] text-white/30 uppercase tracking-[2px] block">
-                      // SECURE DISPATCH SIZING SELECT //
+                      Select Sizing:
                     </span>
                     <div className="grid grid-cols-4 gap-1.5 text-[8.5px]">
                       {specSizes.map((size) => {
@@ -240,11 +240,11 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
                   {/* Price log */}
                   <div className="flex justify-between items-end pt-4">
                     <div>
-                      <span className="text-[7px] text-white/20 uppercase block font-mono">Ledger Value</span>
-                      <span className="text-white font-mono text-[13px] font-bold">${specPrice}</span>
+                      <span className="text-[7px] text-white/20 uppercase block">Price</span>
+                      <span className="text-white text-[13px] font-bold">${specPrice}</span>
                     </div>
-                    <span className="text-[6.5px] text-skims-sand/20 tracking-[1.5px] uppercase font-mono">
-                      CLEAR_KEY: SECURE
+                    <span className="text-[6.5px] text-skims-sand/20 tracking-[1.5px] uppercase">
+                      In Stock
                     </span>
                   </div>
                 </div>

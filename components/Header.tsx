@@ -14,9 +14,9 @@ export default function Header() {
   const pathname = usePathname();
 
   const announcements = [
-    "COMPLIMENTARY DISPATCH ON ALL ORDERS OVER $150",
-    "THE GIRAGON COLLECTION // CORE FOUNDATIONS ACTIVE NOW",
-    "SUBSCRIBE FOR PRE-ACCESS KEYS TO UPCOMING RELEASES"
+    "FREE SHIPPING ON ALL ORDERS OVER $150",
+    "THE GIRAGON COLLECTION | CORE FOUNDATIONS AVAILABLE NOW",
+    "SUBSCRIBE FOR EARLY ACCESS TO NEW RELEASES"
   ];
 
   useEffect(() => {
@@ -27,16 +27,13 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { label: "Shop All", shortLabel: "ALL", href: "/" },
-    { label: "Compression", shortLabel: "COMP", href: "/search/compression" },
-    { label: "Loungewear", shortLabel: "LNGE", href: "/search/loungewear" },
-    { label: "Underwear", shortLabel: "UNDR", href: "/search/underwear" }
+    { label: "Shop All", shortLabel: "SHOP", href: "/" }
   ];
 
   return (
     <>
       {/* Top Announcement Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#C5A880] text-black py-2 text-[7.5px] font-mono tracking-[4px] uppercase text-center font-bold">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#C5A880] text-black py-2 text-[7.5px] font-sans tracking-[4px] uppercase text-center font-bold">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeAnn}
@@ -51,12 +48,12 @@ export default function Header() {
       </div>
 
       {/* Brand Watermark Logo - Top Center Floating */}
-      <div className="fixed top-12 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none flex flex-col items-center gap-1 opacity-60">
+      <div className="fixed top-12 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none flex flex-col items-center gap-1 opacity-80">
         <div className="flex items-center gap-2">
           <img src="/logo-outline.png" alt="KSHADP outline" className="w-5 h-5 filter invert animate-float" />
-          <span className="font-serif text-[11px] text-white tracking-[6px] uppercase font-light">KSHADP</span>
+          <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">KSHADP</span>
         </div>
-        <span className="font-mono text-[5.5px] text-skims-accent tracking-[3px] uppercase">// ATELIER CORES //</span>
+        <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">Atelier Cores</span>
       </div>
 
       {/* Atelier OS Floating Bottom Navigation Dock */}
@@ -77,10 +74,10 @@ export default function Header() {
                   href={link.href}
                   className="relative px-2.5 py-1.5 transition-all text-left"
                 >
-                  <span className="hidden sm:inline font-mono text-[9px] tracking-[2px] uppercase text-skims-sand/65 hover:text-white font-medium transition-colors">
+                  <span className="hidden sm:inline font-sans text-[9px] tracking-[2px] uppercase text-skims-sand/65 hover:text-white font-medium transition-colors">
                     {link.label}
                   </span>
-                  <span className="inline sm:hidden font-mono text-[8.5px] tracking-[1px] uppercase text-skims-sand/65 hover:text-white font-bold transition-colors">
+                  <span className="inline sm:hidden font-sans text-[8.5px] tracking-[1px] uppercase text-skims-sand/65 hover:text-white font-bold transition-colors">
                     {link.shortLabel}
                   </span>
                   {isActive && (
@@ -136,7 +133,7 @@ export default function Header() {
             <Link
               href="/account"
               className="p-2 rounded-full hover:bg-white/5 hover:text-white transition-all hidden sm:block"
-              aria-label="Access client account ledger"
+              aria-label="Access client account"
             >
               <User className="w-4 h-4" />
             </Link>
@@ -178,15 +175,15 @@ export default function Header() {
                       window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
                     }
                   }}
-                  placeholder="SEARCH DOCK: SCAN ITEMS, HOODIES, CORE SERIES..."
-                  className="flex-grow bg-transparent border-none text-[10px] font-mono tracking-widest text-white focus:outline-none placeholder:text-skims-sand/20 uppercase"
+                  placeholder="Search products, hoodies, compression..."
+                  className="flex-grow bg-transparent border-none text-[10px] font-sans tracking-widest text-white focus:outline-none placeholder:text-skims-sand/30 uppercase"
                 />
                 {searchQuery ? (
                   <button onClick={() => setSearchQuery("")} className="text-white/40 hover:text-white">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 ) : (
-                  <span className="text-[6.5px] font-mono text-white/25 tracking-[1px]">// KSH-OS</span>
+                  <span className="text-[6.5px] font-sans text-white/25 tracking-[1px]">KSHADP System</span>
                 )}
               </div>
             </motion.div>

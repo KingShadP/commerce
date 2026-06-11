@@ -74,7 +74,7 @@ export default function CartModal() {
         <OpenCart quantity={cart?.totalQuantity} />
       </button>
       <Transition show={isOpen}>
-        <Dialog onClose={closeCart} className="relative z-50 font-mono">
+        <Dialog onClose={closeCart} className="relative z-50 font-sans">
           <Transition.Child
             as={Fragment}
             enter="transition-all ease-in-out duration-300"
@@ -247,12 +247,12 @@ export default function CartModal() {
                       })}
 
                     {/* Complete the Look Section */}
-                    <div className="pt-6 border-t border-white/5 space-y-4">
+                    <div className="pt-6 border-t border-white/5 space-y-4 font-sans">
                       <div className="flex justify-between items-center text-left">
-                        <span className="font-mono text-[8.5px] text-skims-accent tracking-[2px] uppercase">
-                          // COMPLETE THE LOOK //
+                        <span className="text-[8.5px] text-skims-accent tracking-[2px] uppercase font-bold">
+                          Complete the Look
                         </span>
-                        <span className="text-[7.5px] text-skims-sand/35 tracking-[1px] font-mono uppercase">SUGGESTED EQUIPMENT</span>
+                        <span className="text-[7.5px] text-skims-sand/35 tracking-[1px] uppercase">Suggested For You</span>
                       </div>
                       <div className="space-y-3">
                         {MOCK_RECS.map((rec) => (
@@ -266,13 +266,13 @@ export default function CartModal() {
                               </div>
                               <div>
                                 <h4 className="font-serif text-[11px] text-white uppercase tracking-wide font-light">{rec.title}</h4>
-                                <p className="text-[9px] text-skims-accent font-mono mt-0.5">${rec.price}</p>
+                                <p className="text-[9px] text-skims-accent mt-0.5">${rec.price}</p>
                               </div>
                             </div>
                             <Link
                               href={`/product/${rec.handle}`}
                               onClick={closeCart}
-                              className="px-3.5 py-1.5 border border-skims-accent/40 text-skims-accent hover:border-skims-accent hover:bg-skims-accent hover:text-black font-mono text-[8px] tracking-[1.5px] uppercase transition-all duration-300 cursor-pointer"
+                              className="px-3.5 py-1.5 border border-skims-accent/40 text-skims-accent hover:border-skims-accent hover:bg-skims-accent hover:text-black text-[8px] tracking-[1.5px] uppercase transition-all duration-300 cursor-pointer"
                             >
                               VIEW
                             </Link>
@@ -332,7 +332,7 @@ function CheckoutButton() {
       {pending ? (
         <>
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          SECURE ROUTING...
+          PROCEEDING...
         </>
       ) : (
         "PROCEED TO CHECKOUT"

@@ -13,8 +13,9 @@
   --skims-onyx: #0D0C0B;
   --skims-accent: #C5A880;
   
-  --font-sans: var(--font-geist-sans), Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  --font-sans: var(--font-sans), Arial, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-mono: var(--font-sans), monospace;
 }
 
 @theme {
@@ -28,6 +29,7 @@
   --color-skims-accent: var(--skims-accent);
   
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
 }
 

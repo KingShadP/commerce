@@ -120,12 +120,12 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
   const collectionInfo = getCollectionPath();
 
-  // Dynamic tension outputs based on selected size for spatial HUD feeling
+  // Dynamic tension outputs based on selected size
   const getTensionLog = (size: string) => {
-    if (!size) return "[SELECTION: PENDING CALIBRATION]";
-    if (size === "XXS" || size === "XS") return "[CALIB: HIGH_TENSION_SHAPE // 3.2X STRETCH RECOVERY]";
-    if (size === "S" || size === "M" || size === "L") return "[CALIB: CONFORMING_MID_SUPPORT // 2.5X STRETCH RECOVERY]";
-    return "[CALIB: RELAXED_BASE_STRUCTURE // 1.8X STRETCH RECOVERY]";
+    if (!size) return "Selection Pending";
+    if (size === "XXS" || size === "XS") return "High Tension Shape (3.2x Stretch)";
+    if (size === "S" || size === "M" || size === "L") return "Conforming Mid Support (2.5x Stretch)";
+    return "Relaxed Base Structure (1.8x Stretch)";
   };
 
   const productSpecs = product.tags.filter(t => t !== "mock");
@@ -134,7 +134,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     <div className="max-w-7xl mx-auto px-6 py-10 md:py-16 space-y-12 select-none">
       
       {/* Breadcrumb Navigation - Low Profile HUD style */}
-      <div className="flex items-center gap-2 font-mono text-[8.5px] text-skims-sand/40 uppercase tracking-[2px] select-none text-left">
+      <div className="flex items-center gap-2 font-sans text-[8.5px] text-skims-sand/40 uppercase tracking-[2px] select-none text-left">
         <Link href="/" className="hover:text-white transition-colors">Home</Link>
         <ChevronRight className="w-3 h-3" />
         <Link href={collectionInfo.href} className="hover:text-white transition-colors">{collectionInfo.title}</Link>
@@ -160,11 +160,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-skims-accent/50 pointer-events-none" />
             <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-skims-accent/50 pointer-events-none" />
 
-            <div className="absolute top-6 left-6 font-mono text-[7px] text-skims-sand/30 tracking-[3px] uppercase">
-              ANGLE_GRID // 01_FOCAL
+            <div className="absolute top-6 left-6 font-sans text-[7px] text-skims-sand/30 tracking-[3px] uppercase">
+              Product Detail 01
             </div>
-            <div className="absolute bottom-6 right-6 font-mono text-[6.5px] text-skims-accent/40 tracking-[2px] uppercase">
-              SHA-256 SECURED // KSH-OS
+            <div className="absolute bottom-6 right-6 font-sans text-[6.5px] text-skims-accent/40 tracking-[2px] uppercase">
+              Secure Checkout
             </div>
           </div>
 
@@ -182,27 +182,27 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <div className="absolute top-4 left-4 w-3.5 h-3.5 border-t border-l border-white/20 pointer-events-none" />
               <div className="absolute bottom-4 right-4 w-3.5 h-3.5 border-b border-r border-white/20 pointer-events-none" />
 
-              <div className="absolute top-6 left-6 font-mono text-[7px] text-skims-sand/35 tracking-[3px] uppercase">
-                ANGLE_GRID // 0{idx + 2}_MACRO
+              <div className="absolute top-6 left-6 font-sans text-[7px] text-skims-sand/35 tracking-[3px] uppercase">
+                Product Detail 0{idx + 2}
               </div>
             </div>
           ))}
         </div>
 
         {/* Right Side: Configuration HUD Ledger */}
-        <div className="w-full lg:w-[42%] lg:sticky lg:top-24 space-y-8 text-left font-mono">
+        <div className="w-full lg:w-[42%] lg:sticky lg:top-24 space-y-8 text-left font-sans">
           
           {/* Header Specifications */}
           <div className="space-y-4">
-            <span className="font-mono text-[8px] text-skims-accent tracking-[4px] uppercase block">
-              // ACTIVE ANATOMICAL SPECIFICATION //
+            <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
+              Anatomical Specification
             </span>
             <h1 className="font-serif text-3xl md:text-4.5xl text-white tracking-wide uppercase leading-tight font-light">
               {product.title}
             </h1>
             
             <div className="flex items-center gap-6 border-b border-white/5 pb-6">
-              <div className="text-2xl text-white font-medium font-mono">
+              <div className="text-2xl text-white font-medium font-sans">
                 ${price}
               </div>
               <div className="flex items-center gap-1.5 text-xs text-skims-sand/40">
@@ -211,7 +211,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     <Star key={i} className="w-3 h-3 fill-skims-accent stroke-none" />
                   ))}
                 </div>
-                <span>4.9 (142 calibration records)</span>
+                <span>4.9 (142 reviews)</span>
               </div>
             </div>
 
@@ -223,7 +223,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           {/* 1. Hue/Alloy Calibration */}
           <div className="space-y-3 bg-white/[0.01] border border-white/5 p-4 rounded-2xl">
             <div className="flex justify-between items-center text-[9px] uppercase tracking-[2px] text-skims-sand/50 font-bold">
-              <span>HUE ALLOY VALUE:</span>
+              <span>Color:</span>
               <span className="text-white font-bold">{selectedColor}</span>
             </div>
             <div className="flex gap-3 pt-1">
@@ -254,7 +254,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           {/* 2. Sizing Contour Calibration */}
           <div className="space-y-4 bg-white/[0.01] border border-white/5 p-4 rounded-2xl">
             <div className="flex justify-between items-center text-[9px] uppercase tracking-[2px] text-skims-sand/50 font-bold">
-              <span>SIZE CALIBRATION MATRIX:</span>
+              <span>Size:</span>
               <button className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer text-skims-accent">
                 <Ruler className="w-3.5 h-3.5" />
                 <span>SIZE GUIDE</span>
@@ -284,8 +284,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             </div>
             
             {/* Real-time structural feedback readout */}
-            <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[7.5px] font-mono text-skims-sand/40">
-              <span className="text-white/20">STATUS LOG:</span>
+            <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[7.5px] font-sans text-skims-sand/40">
+              <span className="text-white/20">Tension:</span>
               <span className={selectedSize ? "text-skims-accent font-bold" : "text-white/20"}>
                 {getTensionLog(selectedSize)}
               </span>
@@ -293,7 +293,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             
             {sizeError && (
               <p className="text-[9px] text-red-400 uppercase tracking-[1.5px] animate-pulse">
-                ⚠️ ERROR: SELECT SIZING GAUGE COORD TO INITIATE.
+                ⚠️ Please select a size to proceed.
               </p>
             )}
           </div>
@@ -313,24 +313,24 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               {adding ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent animate-spin rounded-full" />
-                  ADDING TO LEDGER...
+                  Adding to bag...
                 </>
               ) : addedSuccess ? (
                 <>
                   <Check className="w-4 h-4" />
-                  ACQUISITION SECURED ✓
+                  Added to Bag ✓
                 </>
               ) : (
                 <>
                   <ShoppingBag className="w-4 h-4" />
-                  SECURE DOCK DISPATCH
+                  Add to Bag
                 </>
               )}
             </motion.button>
           </div>
 
           {/* Sizing & Material Accordion Systems */}
-          <div className="border-t border-white/10 pt-6 space-y-4">
+          <div className="border-t border-white/10 pt-6 space-y-4 font-sans">
             
             {/* Accordion 1: Material ledger */}
             <div className="border border-white/5 bg-white/[0.01] rounded-xl overflow-hidden">
@@ -338,7 +338,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 onClick={() => toggleAccordion("fabric")}
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
-                <span>[LEDGER_01] FABRIC & RAW MATERIALS WEAVE</span>
+                <span>Fabric & Materials</span>
                 {openAccordion === "fabric" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               
@@ -353,7 +353,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light space-y-2 select-text border-t border-white/5 pt-4">
                       <p>Woven from dynamic long-staple cotton-modal fibers to achieve a soft touch with shape recovery properties.</p>
                       {productSpecs.length > 0 && (
-                        <ul className="list-disc pl-4 font-mono text-[9px] space-y-1 text-skims-accent/80">
+                        <ul className="list-disc pl-4 font-sans text-[9px] space-y-1 text-skims-accent/80">
                           {productSpecs.map((spec, i) => (
                             <li key={i}>{spec}</li>
                           ))}
@@ -373,7 +373,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 onClick={() => toggleAccordion("fit")}
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
-                <span>[LEDGER_02] BIOMETRIC CONTENSION GAUGE</span>
+                <span>Fit & Compression Guide</span>
                 {openAccordion === "fit" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               
@@ -401,7 +401,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 onClick={() => toggleAccordion("shipping")}
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
-                <span>[LEDGER_03] ATELIER LOGISTICS DISPATCH</span>
+                <span>Shipping & Returns</span>
                 {openAccordion === "shipping" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               
@@ -415,7 +415,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light select-text border-t border-white/5 pt-4">
                       <p>
-                        Worldwide dispatch in secure, biodegradable matte packaging. Free standard shipping is auto-applied to all orders exceeding $150. Returns accepted within 14 days of receipt delivery.
+                        Worldwide dispatch in secure, biodegradable packaging. Free standard shipping is auto-applied to all orders exceeding $150. Returns accepted within 14 days of receipt delivery.
                       </p>
                     </div>
                   </motion.div>
@@ -443,7 +443,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <img src={activeImg} alt={product.title} className="w-9 h-11 object-cover border border-white/10 hidden sm:block" />
               <div>
                 <h4 className="font-serif text-[11px] uppercase tracking-wide text-white font-medium">{product.title}</h4>
-                <p className="text-[8.5px] text-skims-sand/40 uppercase tracking-[1px] mt-0.5">
+                <p className="text-[8.5px] text-skims-sand/40 uppercase tracking-[1px] mt-0.5 font-sans">
                   ${price} / {selectedColor} {selectedSize ? `/ Size ${selectedSize}` : ""}
                 </p>
               </div>
@@ -456,7 +456,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className="w-7 h-7 text-[8px] border border-white/10 hover:border-skims-accent text-white flex items-center justify-center font-bold font-mono transition-colors"
+                      className="w-7 h-7 text-[8px] border border-white/10 hover:border-skims-accent text-white flex items-center justify-center font-bold font-sans transition-colors"
                     >
                       {size}
                     </button>
@@ -467,11 +467,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <button
                 onClick={handleAddToBag}
                 disabled={adding}
-                className={`px-6 py-2.5 bg-skims-accent hover:bg-white text-black font-mono font-bold text-[9px] tracking-[2px] uppercase transition-all duration-300 rounded-full ${
+                className={`px-6 py-2.5 bg-skims-accent hover:bg-white text-black font-sans font-bold text-[9px] tracking-[2px] uppercase transition-all duration-300 rounded-full ${
                   addedSuccess ? "bg-green-400" : ""
                 }`}
               >
-                {adding ? "ADDING..." : addedSuccess ? "ADDED ✓" : "SECURE DISPATCH"}
+                {adding ? "Adding..." : addedSuccess ? "Added ✓" : "Add to Bag"}
               </button>
             </div>
           </motion.div>
