@@ -4,15 +4,15 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #0A0908;
-  --foreground: #F5F3EF;
-  --skims-sand: #EAE6DF;
-  --skims-cocoa: #5C4F44;
-  --skims-clay: #AC9E8F;
-  --skims-charcoal: #1C1A18;
-  --skims-onyx: #0D0C0B;
-  --skims-accent: #C5A880;
-  
+  --background: #0a0908;
+  --foreground: #f5f3ef;
+  --skims-sand: #eae6df;
+  --skims-cocoa: #5c4f44;
+  --skims-clay: #ac9e8f;
+  --skims-charcoal: #1c1a18;
+  --skims-onyx: #0d0c0b;
+  --skims-accent: #c5a880;
+
   --font-sans: var(--font-sans), Arial, sans-serif;
   --font-serif: var(--font-serif), Georgia, serif;
   --font-mono: var(--font-sans), monospace;
@@ -27,7 +27,7 @@
   --color-skims-charcoal: var(--skims-charcoal);
   --color-skims-onyx: var(--skims-onyx);
   --color-skims-accent: var(--skims-accent);
-  
+
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
@@ -45,7 +45,8 @@ body {
 .cinematic-environment {
   --camera-scale: 1.025;
   --camera-y: 0px;
-  --fog-shift: 0px;
+  --fog-back-shift: 0px;
+  --fog-front-shift: 0px;
   --light-shift: -18vw;
   --floor-stretch: 1;
   --room-0-opacity: 1;
@@ -92,8 +93,18 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(5, 4, 3, 0.7) 0%, rgba(7, 6, 5, 0.3) 28%, rgba(7, 6, 5, 0.54) 100%),
-    radial-gradient(circle at 50% 42%, transparent 0%, rgba(4, 3, 3, 0.12) 48%, rgba(3, 3, 2, 0.72) 100%);
+    linear-gradient(
+      180deg,
+      rgba(5, 4, 3, 0.7) 0%,
+      rgba(7, 6, 5, 0.3) 28%,
+      rgba(7, 6, 5, 0.54) 100%
+    ),
+    radial-gradient(
+      circle at 50% 42%,
+      transparent 0%,
+      rgba(4, 3, 3, 0.12) 48%,
+      rgba(3, 3, 2, 0.72) 100%
+    );
 }
 
 .cinematic-fog {
@@ -106,18 +117,34 @@ body {
 
 .cinematic-fog-back {
   opacity: 0.18;
-  transform: translate3d(-4vw, calc(var(--fog-shift) * 0.42), 0) scale(1.15);
+  transform: translate3d(-4vw, var(--fog-back-shift), 0) scale(1.15);
   background:
-    radial-gradient(ellipse at 22% 58%, rgba(212, 194, 173, 0.22), transparent 36%),
-    radial-gradient(ellipse at 78% 45%, rgba(126, 110, 95, 0.16), transparent 38%);
+    radial-gradient(
+      ellipse at 22% 58%,
+      rgba(212, 194, 173, 0.22),
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 78% 45%,
+      rgba(126, 110, 95, 0.16),
+      transparent 38%
+    );
 }
 
 .cinematic-fog-front {
   opacity: 0.11;
-  transform: translate3d(5vw, calc(var(--fog-shift) * -0.22), 0) scale(1.28);
+  transform: translate3d(5vw, var(--fog-front-shift), 0) scale(1.28);
   background:
-    radial-gradient(ellipse at 34% 74%, rgba(231, 219, 200, 0.2), transparent 35%),
-    radial-gradient(ellipse at 66% 66%, rgba(130, 104, 88, 0.14), transparent 42%);
+    radial-gradient(
+      ellipse at 34% 74%,
+      rgba(231, 219, 200, 0.2),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at 66% 66%,
+      rgba(130, 104, 88, 0.14),
+      transparent 42%
+    );
 }
 
 .cinematic-light-sweep {
@@ -147,10 +174,20 @@ body {
   will-change: transform;
   background:
     linear-gradient(180deg, rgba(219, 170, 126, 0.14), transparent 16%),
-    repeating-linear-gradient(90deg, transparent 0 10vw, rgba(220, 171, 125, 0.035) 10.1vw 10.2vw),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10vw,
+      rgba(220, 171, 125, 0.035) 10.1vw 10.2vw
+    ),
     linear-gradient(180deg, rgba(255, 235, 207, 0.09), rgba(8, 7, 6, 0.55) 72%);
   filter: blur(1.4px);
-  mask-image: linear-gradient(to bottom, transparent, black 18%, black 78%, transparent);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 18%,
+    black 78%,
+    transparent
+  );
 }
 
 .cinematic-grain {
@@ -177,10 +214,19 @@ body {
 }
 
 @keyframes cinematic-grain-shift {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  25% { transform: translate3d(2%, -1%, 0); }
-  50% { transform: translate3d(-1%, 2%, 0); }
-  75% { transform: translate3d(1%, 1%, 0); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(2%, -1%, 0);
+  }
+  50% {
+    transform: translate3d(-1%, 2%, 0);
+  }
+  75% {
+    transform: translate3d(1%, 1%, 0);
+  }
 }
 
 @media (max-width: 767px) {
@@ -238,30 +284,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0908;
+  background: #0a0908;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2E2A27;
+  background: #2e2a27;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5C4F44;
-}
-
-/* Scanline animation */
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}
-
-.animate-scanline {
-  animation: scanline 8s linear infinite;
+  background: #5c4f44;
 }
 
 /* Marquee scrolling animation */
@@ -280,7 +312,8 @@ body {
 
 /* Float animation */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -295,7 +328,7 @@ body {
 /* Grid lines for architectural blueprint feel */
 .bg-grid-pattern {
   background-size: 40px 40px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(197, 168, 128, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(197, 168, 128, 0.03) 1px, transparent 1px);
 }

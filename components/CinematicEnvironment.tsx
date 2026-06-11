@@ -35,8 +35,12 @@ export default function CinematicEnvironment() {
         reduced ? "0px" : `${(progress * -3.5).toFixed(2)}vh`,
       );
       root.style.setProperty(
-        "--fog-shift",
-        reduced ? "0px" : `${(progress * 11).toFixed(2)}vh`,
+        "--fog-back-shift",
+        reduced ? "0px" : `${(progress * 4.6).toFixed(2)}vh`,
+      );
+      root.style.setProperty(
+        "--fog-front-shift",
+        reduced ? "0px" : `${(progress * -2.4).toFixed(2)}vh`,
       );
       root.style.setProperty(
         "--light-shift",
@@ -66,7 +70,10 @@ export default function CinematicEnvironment() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          entry.target.classList.toggle("is-cinematic-visible", entry.isIntersecting);
+          entry.target.classList.toggle(
+            "is-cinematic-visible",
+            entry.isIntersecting,
+          );
         });
       },
       { rootMargin: "-8% 0px -12%", threshold: 0.08 },
@@ -93,11 +100,7 @@ export default function CinematicEnvironment() {
   }, []);
 
   return (
-    <div
-      ref={rootRef}
-      className="cinematic-environment"
-      aria-hidden="true"
-    >
+    <div ref={rootRef} className="cinematic-environment" aria-hidden="true">
       <div className="cinematic-room cinematic-room-entry" />
       <div className="cinematic-room cinematic-room-salon" />
       <div className="cinematic-room cinematic-room-archive" />

@@ -70,7 +70,7 @@ export default function HeroSlideshow() {
   };
 
   return (
-    <section className="relative h-[95vh] w-full overflow-hidden bg-black border-b border-white/5">
+    <section className="relative h-[95vh] w-full overflow-hidden bg-transparent border-b border-white/5">
       {/* Background Slideshow Canvas */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -97,10 +97,10 @@ export default function HeroSlideshow() {
 
       {/* Floating HUD Labels */}
       <div className="absolute top-12 left-6 sm:left-12 font-sans text-[7px] text-skims-sand/20 tracking-[3px] uppercase hidden sm:block">
-        Honolulu, Hawaii / Studio 08
+        Honolulu, Hawaii / Atelier 08
       </div>
       <div className="absolute top-12 right-6 sm:right-12 font-sans text-[7px] text-skims-sand/20 tracking-[3px] uppercase hidden sm:block">
-        System active // 2026
+        Private release / 2026
       </div>
 
       {/* Hero Content Overlay */}

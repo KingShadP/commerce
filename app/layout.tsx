@@ -29,17 +29,20 @@ export const metadata = {
     default: "KSHADP | Men's Shapewear, Underwear & Loungewear",
     template: `%s | ${SITE_NAME}`,
   },
-  description: "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men. Designed by KingShadP.",
-  keywords: "shapewear for men, compression underwear, ribbed boxers, modal loungewear, sleepwear, kshadp, giragon collection",
+  description:
+    "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men. Designed by KingShadP.",
+  keywords:
+    "shapewear for men, compression underwear, ribbed boxers, modal loungewear, sleepwear, kshadp, giragon collection",
   robots: {
     follow: true,
     index: true,
   },
   openGraph: {
     title: "KSHADP | Men's Shapewear, Underwear & Loungewear",
-    description: "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men.",
+    description:
+      "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men.",
     images: [{ url: "/logo_5.png" }],
-  }
+  },
 };
 
 export default async function RootLayout({
@@ -51,15 +54,13 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="en" className={`${outfit.variable} ${playfair.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${outfit.variable} ${playfair.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col bg-[#0A0908] text-[#F5F3EF] relative selection:bg-[#C5A880]/30 selection:text-white overflow-x-hidden">
         <CartProvider cartPromise={cart}>
           <CinematicEnvironment />
-
-          {/* Brand Scanline Volumetric Sweep */}
-          <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden opacity-[0.015]">
-            <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-[#C5A880] to-transparent animate-scanline" />
-          </div>
 
           {/* Bottom Navigation Dock Header */}
           <Header />
