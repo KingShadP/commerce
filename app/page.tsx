@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getProducts } from "lib/shopify";
 import { getMockProducts } from "lib/mock";
 import FeaturedCarousel from "components/FeaturedCarousel";
-import ProductCard from "components/ProductCard";
+import HeroSlideshow from "components/HeroSlideshow";
 import { ArrowRight, Sliders, Layers, Cpu, Activity } from "lucide-react";
 
 export const revalidate = 60; // Revalidate cache every 60 seconds
@@ -23,80 +23,14 @@ export default async function HomePage() {
     products = getMockProducts();
   }
 
-  const featuredProducts = products.slice(0, 6);
+  // Slice for featured showcase
+  const featuredProducts = products.slice(0, 8);
 
   return (
     <div className="flex flex-col gap-20 md:gap-32 pb-32 select-none overflow-x-hidden">
       
-      {/* --- 1. SYSTEM HERO FRAME (Cinematic OS Backdrop) --- */}
-      <section className="relative h-[95vh] flex items-center justify-center overflow-hidden border-b border-white/5">
-        
-        {/* Background Visualizer Video Loop */}
-        <div className="absolute inset-0 bg-black z-0">
-          <video
-            src="/grok-video-b79bdd1d-d99a-49fc-81f9-764959713bd3.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-25 filter brightness-[0.6] contrast-[1.15]"
-          />
-          {/* Spatial Vignette Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0908] via-transparent to-[#0A0908]/90" />
-          <div className="absolute inset-0 bg-grid-pattern opacity-[0.04]" />
-        </div>
-
-        {/* Spatial Floating Interface Labels (HUD) */}
-        <div className="absolute top-12 left-6 sm:left-12 font-sans text-[7px] text-skims-sand/30 tracking-[3px] uppercase hidden sm:block">
-          Honolulu, Hawaii
-        </div>
-        <div className="absolute top-12 right-6 sm:right-12 font-sans text-[7px] text-skims-sand/30 tracking-[3px] uppercase hidden sm:block">
-          Online Store
-        </div>
-
-        {/* Hero Content Overlay */}
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-10">
-          
-          {/* Centered Brand Mark Banner */}
-          <div className="w-72 md:w-96 animate-float select-none pointer-events-none filter drop-shadow-[0_0_15px_rgba(197,168,128,0.1)]">
-            <img
-              src="/logo-full.png"
-              alt="KingShadP Logo"
-              className="w-full h-auto filter invert opacity-[0.92]"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <p className="font-sans text-[8.5px] md:text-[10px] text-skims-accent tracking-[6px] uppercase animate-pulse">
-              Active Anatomical Compression
-            </p>
-            <h1 className="font-serif text-3xl md:text-5xl font-light text-white tracking-[4px] uppercase max-w-3xl leading-tight">
-              ANATOMICAL CALIBRATION. STRETCH FORMULATIONS.
-            </h1>
-          </div>
-
-          {/* Action Systems */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto font-sans text-[9px] tracking-[4px]">
-            <Link
-              href="#products"
-              className="px-10 py-4.5 bg-skims-accent text-black font-sans font-bold uppercase transition-all duration-500 hover:bg-white text-center shadow-[0_4px_20px_rgba(197,168,128,0.25)] hover:scale-[1.02]"
-            >
-              Shop Compression
-            </Link>
-            <Link
-              href="#products"
-              className="px-10 py-4.5 bg-black/40 border border-white/10 hover:border-skims-accent text-white hover:text-skims-accent transition-all duration-500 backdrop-blur-md text-center hover:scale-[1.02]"
-            >
-              Shop All Products
-            </Link>
-          </div>
-        </div>
-
-        {/* Bottom indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 font-sans text-[7px] text-skims-sand/20 tracking-[5px] uppercase">
-          Scroll to Explore
-        </div>
-      </section>
+      {/* --- 1. DYNAMIC CINEMATIC SLIDESHOW HERO --- */}
+      <HeroSlideshow />
 
       {/* --- 2. MATERIAL SPECIFICATION TICKER (Blueprint Ribbon) --- */}
       <section className="w-full overflow-hidden bg-white/[0.01] border-y border-white/5 py-4 select-none pointer-events-none">
@@ -194,27 +128,27 @@ export default async function HomePage() {
               <div>Stretch Ratio: 2.5x Axis Retention</div>
             </div>
             <div className="pt-2">
-              <Link
-                href="#products"
+              <a
+                href="#featured-selections"
                 className="inline-flex items-center gap-3 border border-skims-accent/30 hover:border-skims-accent px-6 py-3 font-sans text-[9px] tracking-[3px] uppercase text-skims-accent hover:text-white transition-all duration-300 bg-black/40"
               >
                 <span>Explore Collection</span>
                 <ArrowRight className="w-3 h-3" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* --- 5. ENDLESS HORIZONTAL CAROUSEL (Cinematic Spatial Catalog) --- */}
-      <section className="w-full space-y-8">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-end border-b border-white/5 pb-4">
-          <div className="space-y-1 text-left">
+      <section id="featured-selections" className="w-full space-y-12 scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-end border-b border-white/5 pb-6">
+          <div className="space-y-2 text-left">
             <span className="font-sans text-[8px] text-skims-accent tracking-[3px] uppercase">
-              01 | Featured
+              01 | Featured Collection
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl text-white tracking-wide uppercase font-light">
-              Featured Products
+            <h2 className="font-serif text-3xl md:text-4.5xl text-white tracking-wide uppercase font-light">
+              Featured Selections
             </h2>
           </div>
           <div className="font-sans text-[7px] text-skims-sand/30 tracking-[2px] uppercase hidden sm:block">
@@ -226,30 +160,7 @@ export default async function HomePage() {
         <FeaturedCarousel products={featuredProducts} />
       </section>
 
-      {/* --- 6. ALL PRODUCTS GRID (Premium Product Grid) --- */}
-      <section id="products" className="max-w-7xl mx-auto px-6 w-full space-y-8 scroll-mt-24">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/5 pb-6 gap-4">
-          <div className="space-y-1 text-left">
-            <span className="font-sans text-[8px] text-skims-accent tracking-[3px] uppercase">
-              02 | Product Catalog
-            </span>
-            <h2 className="font-serif text-2xl md:text-3xl text-white tracking-wide uppercase font-light">
-              All Products
-            </h2>
-          </div>
-          <p className="font-sans text-[8.5px] text-skims-sand/30 uppercase tracking-[2px]">
-            {products.length} Products Available
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* --- 7. SECURE NEWSLETTER INTAKE (Command Line Interface) --- */}
+      {/* --- 6. SECURE NEWSLETTER INTAKE (Command Line Interface) --- */}
       <section className="max-w-3xl mx-auto px-6 w-full pt-12">
         <div className="glass-panel border border-white/10 p-8 sm:p-12 text-center space-y-6 relative overflow-hidden rounded-3xl shadow-xl">
           <div className="absolute top-0 right-0 w-24 h-[1px] bg-skims-accent/20" />
@@ -290,7 +201,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* --- 8. BRAND ETHOS WATERMARK --- */}
+      {/* --- 7. BRAND ETHOS WATERMARK --- */}
       <section className="max-w-3xl mx-auto px-6 text-center space-y-6 pt-12 select-text">
         <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
           Our Ethos

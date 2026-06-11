@@ -115,10 +115,10 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
-        className="w-full overflow-x-auto flex gap-6 px-6 sm:px-12 md:px-24 pb-8 scroll-smooth snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing select-none"
+        className="w-full overflow-x-auto flex gap-10 px-6 sm:px-12 md:px-24 pb-12 scroll-smooth snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing select-none"
       >
         {products.map((product) => (
-          <div key={product.id} className="w-[80vw] sm:w-[45vw] md:w-[30vw] lg:w-[22vw] flex-shrink-0 snap-start">
+          <div key={product.id} className="w-[85vw] sm:w-[50vw] md:w-[36vw] lg:w-[28vw] flex-shrink-0 snap-start hover:scale-[1.01] transition-transform duration-500">
             <ProductCard product={product} />
           </div>
         ))}
