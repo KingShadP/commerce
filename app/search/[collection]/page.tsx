@@ -1,16 +1,21 @@
 import { getCollection, getCollectionProducts } from "lib/shopify";
+import { getMockProducts, getMockCollections } from "lib/mock";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import Grid from "components/grid";
-import ProductGridItems from "components/layout/product-grid-items";
+import CollectionCatalogClient from "components/CollectionCatalogClient";
 import { defaultSort, sorting } from "lib/constants";
+import { Suspense } from "react";
 
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  const collection = await getCollection(params.collection);
+  let collection = await getCollection(params.collection);
+
+  if (!collection) {
+    const mockCols = getMockCollections();
+    collection = mockCols.find((c) => c.handle === params.collection);
+  }
 
   if (!collection) return notFound();
 
@@ -32,21 +37,32 @@ export default async function CategoryPage(props: {
   const { sort } = searchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-  const products = await getCollectionProducts({
+    
+  let products = await getCollectionProducts({
     collection: params.collection,
     sortKey,
     reverse,
   });
 
+  if (products.length === 0) {
+    const mockProducts = getMockProducts();
+    const handle = params.collection.toLowerCase();
+    if (handle === "compression") {
+      products = mockProducts.filter((p) => p.handle.includes("tank") || p.handle.includes("ls") || p.handle.includes("compression"));
+    } else if (handle === "loungewear") {
+      products = mockProducts.filter((p) => p.handle.includes("hoodie") || p.handle.includes("pants") || p.handle.includes("tee"));
+    } else if (handle === "underwear") {
+      products = mockProducts.filter((p) => p.handle.includes("boxer") || p.handle.includes("underwear"));
+    } else {
+      products = mockProducts;
+    }
+  }
+
   return (
-    <section>
-      {products.length === 0 ? (
-        <p className="py-3 text-lg">{`No products found in this collection`}</p>
-      ) : (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
-        </Grid>
-      )}
+    <section className="w-full">
+      <Suspense fallback={<div className="font-mono text-[10px] text-skims-sand/40 uppercase">// LOADING CLASSIFIED NODES...</div>}>
+        <CollectionCatalogClient products={products} />
+      </Suspense>
     </section>
   );
 }
