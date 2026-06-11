@@ -42,6 +42,195 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.cinematic-environment {
+  --camera-scale: 1.025;
+  --camera-y: 0px;
+  --fog-shift: 0px;
+  --light-shift: -18vw;
+  --floor-stretch: 1;
+  --room-0-opacity: 1;
+  --room-1-opacity: 0;
+  --room-2-opacity: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #090807;
+  contain: strict;
+  isolation: isolate;
+}
+
+.cinematic-room {
+  position: absolute;
+  inset: -5%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translate3d(0, var(--camera-y), 0) scale(var(--camera-scale));
+  transform-origin: 50% 56%;
+  will-change: transform, opacity;
+  transition: opacity 180ms linear;
+}
+
+.cinematic-room-entry {
+  opacity: var(--room-0-opacity);
+  background-image: url("/rooms/room-entry.webp");
+}
+
+.cinematic-room-salon {
+  opacity: var(--room-1-opacity);
+  background-image: url("/rooms/room-salon.webp");
+}
+
+.cinematic-room-archive {
+  opacity: var(--room-2-opacity);
+  background-image: url("/rooms/room-archive.webp");
+}
+
+.cinematic-text-safety {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 4, 3, 0.7) 0%, rgba(7, 6, 5, 0.3) 28%, rgba(7, 6, 5, 0.54) 100%),
+    radial-gradient(circle at 50% 42%, transparent 0%, rgba(4, 3, 3, 0.12) 48%, rgba(3, 3, 2, 0.72) 100%);
+}
+
+.cinematic-fog {
+  position: absolute;
+  inset: -24%;
+  will-change: transform;
+  filter: blur(22px);
+  mix-blend-mode: screen;
+}
+
+.cinematic-fog-back {
+  opacity: 0.18;
+  transform: translate3d(-4vw, calc(var(--fog-shift) * 0.42), 0) scale(1.15);
+  background:
+    radial-gradient(ellipse at 22% 58%, rgba(212, 194, 173, 0.22), transparent 36%),
+    radial-gradient(ellipse at 78% 45%, rgba(126, 110, 95, 0.16), transparent 38%);
+}
+
+.cinematic-fog-front {
+  opacity: 0.11;
+  transform: translate3d(5vw, calc(var(--fog-shift) * -0.22), 0) scale(1.28);
+  background:
+    radial-gradient(ellipse at 34% 74%, rgba(231, 219, 200, 0.2), transparent 35%),
+    radial-gradient(ellipse at 66% 66%, rgba(130, 104, 88, 0.14), transparent 42%);
+}
+
+.cinematic-light-sweep {
+  position: absolute;
+  inset: -18% -44%;
+  opacity: 0.32;
+  transform: translate3d(var(--light-shift), 0, 0) rotate(-13deg);
+  will-change: transform;
+  background: linear-gradient(
+    90deg,
+    transparent 37%,
+    rgba(207, 153, 113, 0.04) 43%,
+    rgba(239, 198, 146, 0.24) 49%,
+    rgba(183, 119, 92, 0.09) 54%,
+    transparent 62%
+  );
+  filter: blur(14px);
+  mix-blend-mode: screen;
+}
+
+.cinematic-floor {
+  position: absolute;
+  inset: 63% -12% -22%;
+  opacity: 0.22;
+  transform: perspective(620px) rotateX(64deg) scaleY(var(--floor-stretch));
+  transform-origin: 50% 100%;
+  will-change: transform;
+  background:
+    linear-gradient(180deg, rgba(219, 170, 126, 0.14), transparent 16%),
+    repeating-linear-gradient(90deg, transparent 0 10vw, rgba(220, 171, 125, 0.035) 10.1vw 10.2vw),
+    linear-gradient(180deg, rgba(255, 235, 207, 0.09), rgba(8, 7, 6, 0.55) 72%);
+  filter: blur(1.4px);
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 78%, transparent);
+}
+
+.cinematic-grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  transform: translate3d(0, 0, 0);
+  animation: cinematic-grain-shift 12s steps(2, end) infinite;
+  mix-blend-mode: soft-light;
+}
+
+.cinematic-section {
+  opacity: 0.72;
+  transform: translate3d(0, 22px, 0) scale(0.992);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cinematic-section.is-cinematic-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@keyframes cinematic-grain-shift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(2%, -1%, 0); }
+  50% { transform: translate3d(-1%, 2%, 0); }
+  75% { transform: translate3d(1%, 1%, 0); }
+}
+
+@media (max-width: 767px) {
+  .cinematic-room {
+    inset: -2%;
+    transform: scale(1.015);
+  }
+
+  .cinematic-fog,
+  .cinematic-light-sweep,
+  .cinematic-floor {
+    display: none;
+  }
+
+  .cinematic-grain {
+    opacity: 0.028;
+    animation: none;
+  }
+
+  .cinematic-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-room {
+    transform: scale(1.015);
+    transition: none;
+  }
+
+  .cinematic-fog,
+  .cinematic-light-sweep,
+  .cinematic-floor {
+    display: none;
+  }
+
+  .cinematic-grain {
+    animation: none;
+  }
+
+  .cinematic-section,
+  .cinematic-section.is-cinematic-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

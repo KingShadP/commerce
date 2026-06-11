@@ -1,6 +1,6 @@
 import { CartProvider } from "components/cart/cart-context";
+import CinematicEnvironment from "components/CinematicEnvironment";
 import Header from "components/Header";
-import SovereignWebGLStage from "components/SovereignWebGLStage";
 import { WelcomeToast } from "components/welcome-toast";
 import { Outfit, Playfair_Display } from "next/font/google";
 import { getCart } from "lib/shopify";
@@ -54,8 +54,7 @@ export default async function RootLayout({
     <html lang="en" className={`${outfit.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#0A0908] text-[#F5F3EF] relative selection:bg-[#C5A880]/30 selection:text-white overflow-x-hidden">
         <CartProvider cartPromise={cart}>
-          {/* Animated 3D WebGL Backdrop */}
-          <SovereignWebGLStage isLowPerformance={false} />
+          <CinematicEnvironment />
 
           {/* Brand Scanline Volumetric Sweep */}
           <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden opacity-[0.015]">

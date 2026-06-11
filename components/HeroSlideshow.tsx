@@ -105,20 +105,6 @@ export default function HeroSlideshow() {
 
       {/* Hero Content Overlay */}
       <div className="relative z-10 h-full max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center">
-        {/* Animated Brand Logo Watermark */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 0.85, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="w-56 md:w-72 mb-8 select-none pointer-events-none filter drop-shadow-[0_0_15px_rgba(197,168,128,0.12)]"
-        >
-          <img
-            src="/logo_5.png"
-            alt="KingShadP Logo"
-            className="w-full h-auto"
-          />
-        </motion.div>
-
         {/* Text Slideshow */}
         <div className="space-y-6 max-w-3xl min-h-[140px] flex flex-col items-center justify-center">
           <AnimatePresence mode="wait">
