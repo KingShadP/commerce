@@ -38,7 +38,7 @@ export const metadata = {
   openGraph: {
     title: "KSHADP | Men's Shapewear, Underwear & Loungewear",
     description: "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men.",
-    images: [{ url: "/logo-full.png" }],
+    images: [{ url: "/logo_5.png" }],
   }
 };
 

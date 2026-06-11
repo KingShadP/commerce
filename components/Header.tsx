@@ -50,7 +50,7 @@ export default function Header() {
       {/* Brand Watermark Logo - Top Center Floating */}
       <div className="fixed top-12 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none flex flex-col items-center gap-1 opacity-80">
         <div className="flex items-center gap-2">
-          <img src="/logo-outline.png" alt="KSHADP outline" className="w-5 h-5 filter invert animate-float" />
+          <img src="/logo_3.png" alt="KSHADP outline" className="w-5 h-5 animate-float" />
           <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">KSHADP</span>
         </div>
         <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">Atelier Cores</span>
@@ -103,9 +103,9 @@ export default function Header() {
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-skims-accent/30 bg-black/40 flex items-center justify-center overflow-hidden hover:border-skims-accent/80 transition-colors"
             >
               <img
-                src="/logo-outline.png"
+                src="/logo_3.png"
                 alt="Brand Mark"
-                className="w-4 h-4 sm:w-4.5 sm:h-4.5 filter invert opacity-80 group-hover:opacity-100 transition-opacity"
+                className="w-4 h-4 sm:w-4.5 sm:h-4.5 opacity-80 group-hover:opacity-100 transition-opacity"
               />
             </motion.div>
             {/* Pulsing indicator */}

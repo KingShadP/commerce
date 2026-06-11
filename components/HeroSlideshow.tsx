@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface Slide {
-  videoSrc: string;
+  imgSrc: string;
   subtitle: string;
   title: string;
   primaryBtnText: string;
@@ -15,26 +15,40 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    videoSrc: "/grok-video-b79bdd1d-d99a-49fc-81f9-764959713bd3.mp4",
-    subtitle: "Active Anatomical Compression",
-    title: "ANATOMICAL CALIBRATION. STRETCH FORMULATIONS.",
-    primaryBtnText: "Shop Compression",
-    primaryBtnHref: "/search?q=compression"
+    imgSrc: "/slide-dragon-1.jpg",
+    subtitle: "The Dragon Series | Limited Edition",
+    title: "MEDITERRANEAN ORANGE COTTON FLEECE.",
+    primaryBtnText: "Shop Orange",
+    primaryBtnHref: "/search?q=orange",
   },
   {
-    videoSrc: "/grok-video-8499d2b9-086f-45f4-901e-e75c87098469.mp4",
-    subtitle: "Premium Foundation Knitwear",
-    title: "ATELIER CORES. DESIGN FOR POSTURE.",
-    primaryBtnText: "Shop Loungewear",
-    primaryBtnHref: "/search?q=loungewear"
+    imgSrc: "/slide-dragon-2.jpg",
+    subtitle: "The Dragon Series | Limited Edition",
+    title: "OBSIDIAN BLACK POST-ACTIVE KNIT.",
+    primaryBtnText: "Shop Obsidian",
+    primaryBtnHref: "/search?q=black",
   },
   {
-    videoSrc: "/grok-video-9b5f3cfc-647d-442c-9e8a-d68d20062bd9.mp4",
-    subtitle: "Support Posture Post-Active",
-    title: "THE GIRAGON STUDY. ENGINEERED FIT.",
-    primaryBtnText: "Shop Underwear",
-    primaryBtnHref: "/search?q=underwear"
-  }
+    imgSrc: "/slide-dragon-3.jpg",
+    subtitle: "The Dragon Series | Limited Edition",
+    title: "CREAM ALABASTER HEAVYWEIGHT SWEATER.",
+    primaryBtnText: "Shop Alabaster",
+    primaryBtnHref: "/search?q=cream",
+  },
+  {
+    imgSrc: "/slide-dragon-4.jpg",
+    subtitle: "The Dragon Series | Limited Edition",
+    title: "CORAL PINK CONTUSION SWEATSHIRT.",
+    primaryBtnText: "Shop Coral",
+    primaryBtnHref: "/search?q=coral",
+  },
+  {
+    imgSrc: "/slide-dragon-5.jpg",
+    subtitle: "The Dragon Series | Limited Edition",
+    title: "PASTEL SUNLIGHT HEAVY COTTON CREW.",
+    primaryBtnText: "Shop Sunlight",
+    primaryBtnHref: "/search?q=yellow",
+  },
 ];
 
 export default function HeroSlideshow() {
@@ -57,7 +71,6 @@ export default function HeroSlideshow() {
 
   return (
     <section className="relative h-[95vh] w-full overflow-hidden bg-black border-b border-white/5">
-      
       {/* Background Slideshow Canvas */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -69,17 +82,14 @@ export default function HeroSlideshow() {
             transition={{ duration: 1.2, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full"
           >
-            <video
-              src={slides[current]?.videoSrc}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover opacity-25 filter brightness-[0.55] contrast-[1.1]"
+            <img
+              src={slides[current]?.imgSrc}
+              alt={slides[current]?.title}
+              className="w-full h-full object-cover opacity-35 filter brightness-[0.6] contrast-[1.1]"
             />
           </motion.div>
         </AnimatePresence>
-        
+
         {/* Luxury Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0908] via-transparent to-[#0A0908]/90" />
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
@@ -95,21 +105,6 @@ export default function HeroSlideshow() {
 
       {/* Hero Content Overlay */}
       <div className="relative z-10 h-full max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center">
-        
-        {/* Animated Brand Logo Watermark */}
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 0.85, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="w-56 md:w-72 mb-10 select-none pointer-events-none filter drop-shadow-[0_0_12px_rgba(197,168,128,0.08)]"
-        >
-          <img
-            src="/logo-full.png"
-            alt="KingShadP Logo"
-            className="w-full h-auto filter invert"
-          />
-        </motion.div>
-
         {/* Text Slideshow */}
         <div className="space-y-6 max-w-3xl min-h-[140px] flex flex-col items-center justify-center">
           <AnimatePresence mode="wait">
@@ -177,15 +172,16 @@ export default function HeroSlideshow() {
             className="group flex flex-col items-center p-2 cursor-pointer"
             aria-label={`Go to slide ${idx + 1}`}
           >
-            <div 
+            <div
               className={`h-0.5 rounded-full transition-all duration-500 ${
-                current === idx ? "w-10 bg-skims-accent" : "w-4 bg-white/20 group-hover:bg-white/55"
-              }`} 
+                current === idx
+                  ? "w-10 bg-skims-accent"
+                  : "w-4 bg-white/20 group-hover:bg-white/55"
+              }`}
             />
           </button>
         ))}
       </div>
-
     </section>
   );
 }
