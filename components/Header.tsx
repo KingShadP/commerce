@@ -6,15 +6,20 @@ import { usePathname } from "next/navigation";
 import { Search, User, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CartModal from "components/cart/modal";
+import type { SiteDesignSettings } from "lib/site-design";
 
-export default function Header() {
+export default function Header({
+  settings,
+}: {
+  settings: SiteDesignSettings;
+}) {
   const [activeAnn, setActiveAnn] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
 
   const announcements = [
-    "FREE SHIPPING ON ALL ORDERS OVER $150",
+    settings.announcement,
     "THE GIRAGON COLLECTION | CORE FOUNDATIONS AVAILABLE NOW",
     "SUBSCRIBE FOR EARLY ACCESS TO NEW RELEASES"
   ];
@@ -51,9 +56,9 @@ export default function Header() {
       <div className="fixed top-12 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none flex flex-col items-center gap-1 opacity-80">
         <div className="flex items-center gap-2">
           <img src="/logo_3.png" alt="KSHADP outline" className="w-5 h-5 animate-float" />
-          <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">KSHADP</span>
+          <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">{settings.brandName}</span>
         </div>
-        <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">Atelier Cores</span>
+        <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">{settings.brandDescriptor}</span>
       </div>
 
       {/* Atelier OS Floating Bottom Navigation Dock */}

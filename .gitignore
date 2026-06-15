@@ -40,3 +40,6 @@ next-env.d.ts
 
 # backups
 /backup-sanctum*
+
+# local design-studio persistence
+/.data/

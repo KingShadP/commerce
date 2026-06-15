@@ -76,17 +76,14 @@ body {
 
 .cinematic-room-entry {
   opacity: var(--room-0-opacity);
-  background-image: url("/rooms/room-entry.webp");
 }
 
 .cinematic-room-salon {
   opacity: var(--room-1-opacity);
-  background-image: url("/rooms/room-salon.webp");
 }
 
 .cinematic-room-archive {
   opacity: var(--room-2-opacity);
-  background-image: url("/rooms/room-archive.webp");
 }
 
 .cinematic-text-safety {
@@ -105,6 +102,15 @@ body {
       rgba(4, 3, 3, 0.12) 48%,
       rgba(3, 3, 2, 0.72) 100%
     );
+  opacity: var(--overlay-strength, 0.68);
+}
+
+.hero-campaign-image {
+  opacity: var(--hero-image-opacity, 0.35);
+}
+
+.hero-text-safety {
+  opacity: var(--overlay-strength, 0.68);
 }
 
 .cinematic-fog {

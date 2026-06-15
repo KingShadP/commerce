@@ -4,10 +4,12 @@ import Header from "components/Header";
 import { WelcomeToast } from "components/welcome-toast";
 import { Outfit, Playfair_Display } from "next/font/google";
 import { getCart } from "lib/shopify";
-import { ReactNode } from "react";
+import { getSiteDesignSettings } from "lib/site-design";
+import { CSSProperties, ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { baseUrl } from "lib/utils";
+import SmoothScrollProvider from "components/SmoothScrollProvider";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -52,26 +54,39 @@ export default async function RootLayout({
 }) {
   // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
+  const design = await getSiteDesignSettings();
+  const designVariables = {
+    "--background": design.backgroundColor,
+    "--foreground": design.foregroundColor,
+    "--skims-accent": design.accentColor,
+    "--hero-image-opacity": design.heroImageOpacity,
+    "--overlay-strength": design.overlayStrength,
+  } as CSSProperties;
 
   return (
     <html
       lang="en"
       className={`${outfit.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0908] text-[#F5F3EF] relative selection:bg-[#C5A880]/30 selection:text-white overflow-x-hidden">
-        <CartProvider cartPromise={cart}>
-          <CinematicEnvironment />
+      <body
+        style={designVariables}
+        className="min-h-full flex flex-col bg-background text-foreground relative selection:bg-skims-accent/30 selection:text-white overflow-x-hidden"
+      >
+        <SmoothScrollProvider>
+          <CartProvider cartPromise={cart}>
+            <CinematicEnvironment settings={design} />
 
-          {/* Bottom Navigation Dock Header */}
-          <Header />
+            {/* Bottom Navigation Dock Header */}
+            <Header settings={design} />
 
-          {/* Page Contents */}
-          <main className="flex-grow pt-7 relative z-20">
-            {children}
-            <Toaster closeButton />
-            <WelcomeToast />
-          </main>
-        </CartProvider>
+            {/* Page Contents */}
+            <main className="flex-grow pt-7 relative z-20">
+              {children}
+              <Toaster closeButton />
+              <WelcomeToast />
+            </main>
+          </CartProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

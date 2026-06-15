@@ -85,13 +85,13 @@ export default function HeroSlideshow() {
             <img
               src={slides[current]?.imgSrc}
               alt={slides[current]?.title}
-              className="w-full h-full object-cover opacity-35 filter brightness-[0.6] contrast-[1.1]"
+              className="hero-campaign-image w-full h-full object-cover filter brightness-[0.6] contrast-[1.1]"
             />
           </motion.div>
         </AnimatePresence>
 
         {/* Luxury Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0908] via-transparent to-[#0A0908]/90" />
+        <div className="hero-text-safety absolute inset-0 bg-gradient-to-t from-[#0A0908] via-transparent to-[#0A0908]/90" />
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
       </div>
 
