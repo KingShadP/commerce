@@ -37,6 +37,10 @@
   ],
   "exclude": [
     "node_modules",
+    "hydro",
+    "sactum",
+    "scratch",
+    "shopify-theme-sanctum",
     "backup-sanctum-current",
     "backup-sanctum"
   ]

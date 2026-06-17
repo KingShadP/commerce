@@ -3,6 +3,7 @@
 import {
   Eye,
   ImageIcon,
+  ListOrdered,
   LogOut,
   Palette,
   RotateCcw,
@@ -10,7 +11,12 @@ import {
   SlidersHorizontal,
   Sparkles,
 } from "lucide-react";
-import type { SiteDesignSettings } from "lib/site-design";
+import {
+  defaultHeroSlides,
+  homepageSectionLabels,
+  type HomepageSectionKey,
+  type SiteDesignSettings,
+} from "lib/site-design-schema";
 import { useActionState, useState } from "react";
 import {
   logoutAdmin,
@@ -22,6 +28,14 @@ const initialActionState: SaveDesignState = {
   status: "idle",
   message: "",
 };
+
+const heroFieldDefinitions = [
+  ["Image", "imgSrc", "Image"],
+  ["Subtitle", "subtitle", "Subtitle"],
+  ["Title", "title", "Title"],
+  ["Button text", "primaryBtnText", "ButtonText"],
+  ["Button href", "primaryBtnHref", "ButtonHref"],
+] as const;
 
 function Toggle({
   name,
@@ -85,6 +99,36 @@ export default function AdminDesignStudio({
     });
   };
 
+  const updateHeroSlide = (
+    index: number,
+    key: keyof SiteDesignSettings["heroSlides"][number],
+    value: string,
+  ) => {
+    setSettings((current) => {
+      const heroSlides = [...current.heroSlides];
+      const fallback = defaultHeroSlides[index % defaultHeroSlides.length]!;
+      const currentSlide = heroSlides[index] || fallback;
+      heroSlides[index] = {
+        ...fallback,
+        ...currentSlide,
+        [key]: value,
+      };
+      return { ...current, heroSlides };
+    });
+  };
+
+  const updateSectionOrder = (value: string) => {
+    const allowed = new Set(Object.keys(homepageSectionLabels));
+    const ordered = value
+      .split(",")
+      .map((item) => item.trim())
+      .filter((item): item is HomepageSectionKey =>
+        allowed.has(item),
+      );
+
+    update("homepageSectionOrder", ordered);
+  };
+
   return (
     <div className="relative z-40 min-h-screen bg-[#090807]/92 px-4 pb-28 pt-14 text-white backdrop-blur-xl sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1500px]">
@@ -125,6 +169,7 @@ export default function AdminDesignStudio({
                 {[
                   ["brandName", "Brand name"],
                   ["brandDescriptor", "Brand descriptor"],
+                  ["logoUrl", "Logo image URL"],
                   ["announcement", "Announcement bar"],
                 ].map(([name, label]) => (
                   <label key={name}>
@@ -139,6 +184,7 @@ export default function AdminDesignStudio({
                           name as
                             | "brandName"
                             | "brandDescriptor"
+                            | "logoUrl"
                             | "announcement",
                           event.target.value,
                         )
@@ -147,6 +193,12 @@ export default function AdminDesignStudio({
                     />
                   </label>
                 ))}
+                <Toggle
+                  name="showHeaderLogo"
+                  label="Show header logo"
+                  checked={settings.showHeaderLogo}
+                  onChange={(value) => update("showHeaderLogo", value)}
+                />
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     ["accentColor", "Accent"],
@@ -177,6 +229,44 @@ export default function AdminDesignStudio({
                     </label>
                   ))}
                 </div>
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
+              <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
+                <ImageIcon className="h-4 w-4 text-skims-accent" />
+                Hero slides
+              </h2>
+              <div className="mt-5 space-y-5">
+                {settings.heroSlides.map((slide, index) => (
+                  <div
+                    key={index}
+                    className="space-y-3 rounded-2xl border border-white/8 bg-black/20 p-4"
+                  >
+                    <p className="text-[8px] uppercase tracking-[0.22em] text-skims-accent">
+                      Slide {index + 1}
+                    </p>
+                    {heroFieldDefinitions.map(([label, key, suffix]) => (
+                      <label key={key}>
+                        <span className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/45">
+                          {label}
+                        </span>
+                        <input
+                          name={`heroSlide${index}${suffix}`}
+                          value={String(slide[key])}
+                          onChange={(event) =>
+                            updateHeroSlide(
+                              index,
+                              key,
+                              event.target.value,
+                            )
+                          }
+                          className="h-10 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-xs outline-none transition focus:border-skims-accent"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                ))}
               </div>
             </section>
 
@@ -263,6 +353,26 @@ export default function AdminDesignStudio({
                   />
                 </div>
               </div>
+            </section>
+
+            <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
+              <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
+                <ListOrdered className="h-4 w-4 text-skims-accent" />
+                Homepage section order
+              </h2>
+              <p className="mt-3 text-xs leading-5 text-white/40">
+                Reorder with comma-separated keys. Available:{" "}
+                {Object.entries(homepageSectionLabels)
+                  .map(([key, label]) => `${key} (${label})`)
+                  .join(", ")}
+              </p>
+              <textarea
+                name="homepageSectionOrder"
+                value={settings.homepageSectionOrder.join(",")}
+                onChange={(event) => updateSectionOrder(event.target.value)}
+                rows={4}
+                className="mt-5 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs leading-5 outline-none transition focus:border-skims-accent"
+              />
             </section>
 
             <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
@@ -386,17 +496,17 @@ export default function AdminDesignStudio({
                     className="text-[8px] uppercase tracking-[0.4em]"
                     style={{ color: settings.accentColor }}
                   >
-                    The Dragon Series
+                    {settings.heroSlides[0]?.subtitle}
                   </p>
                   <h2 className="mt-5 max-w-2xl font-serif text-3xl uppercase tracking-[0.08em] sm:text-5xl">
-                    Architectural luxury, engineered for motion.
+                    {settings.heroSlides[0]?.title}
                   </h2>
                   <div className="mt-8 flex gap-3">
                     <span
                       className="px-8 py-4 text-[8px] font-bold uppercase tracking-[0.24em] text-black"
                       style={{ backgroundColor: settings.accentColor }}
                     >
-                      Shop collection
+                      {settings.heroSlides[0]?.primaryBtnText}
                     </span>
                     <span className="border border-white/20 bg-black/40 px-8 py-4 text-[8px] uppercase tracking-[0.24em]">
                       Explore atelier
@@ -411,4 +521,3 @@ export default function AdminDesignStudio({
     </div>
   );
 }
-

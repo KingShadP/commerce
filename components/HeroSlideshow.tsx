@@ -2,72 +2,40 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import type { HeroSlideSettings } from "lib/site-design-schema";
 
-interface Slide {
-  imgSrc: string;
-  subtitle: string;
-  title: string;
-  primaryBtnText: string;
-  primaryBtnHref: string;
-}
-
-const slides: Slide[] = [
-  {
-    imgSrc: "/slide-dragon-1.jpg",
-    subtitle: "The Dragon Series | Limited Edition",
-    title: "MEDITERRANEAN ORANGE COTTON FLEECE.",
-    primaryBtnText: "Shop Orange",
-    primaryBtnHref: "/search?q=orange",
-  },
-  {
-    imgSrc: "/slide-dragon-2.jpg",
-    subtitle: "The Dragon Series | Limited Edition",
-    title: "OBSIDIAN BLACK POST-ACTIVE KNIT.",
-    primaryBtnText: "Shop Obsidian",
-    primaryBtnHref: "/search?q=black",
-  },
-  {
-    imgSrc: "/slide-dragon-3.jpg",
-    subtitle: "The Dragon Series | Limited Edition",
-    title: "CREAM ALABASTER HEAVYWEIGHT SWEATER.",
-    primaryBtnText: "Shop Alabaster",
-    primaryBtnHref: "/search?q=cream",
-  },
-  {
-    imgSrc: "/slide-dragon-4.jpg",
-    subtitle: "The Dragon Series | Limited Edition",
-    title: "CORAL PINK CONTUSION SWEATSHIRT.",
-    primaryBtnText: "Shop Coral",
-    primaryBtnHref: "/search?q=coral",
-  },
-  {
-    imgSrc: "/slide-dragon-5.jpg",
-    subtitle: "The Dragon Series | Limited Edition",
-    title: "PASTEL SUNLIGHT HEAVY COTTON CREW.",
-    primaryBtnText: "Shop Sunlight",
-    primaryBtnHref: "/search?q=yellow",
-  },
-];
-
-export default function HeroSlideshow() {
+export default function HeroSlideshow({
+  slides,
+}: {
+  slides: HeroSlideSettings[];
+}) {
   const [current, setCurrent] = useState(0);
+  const activeSlides = slides.length ? slides : [];
 
   useEffect(() => {
+    if (activeSlides.length < 2) return;
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
+      setCurrent((prev) => (prev + 1) % activeSlides.length);
     }, 7000);
     return () => clearInterval(timer);
-  }, []);
+  }, [activeSlides.length]);
 
   const handlePrev = () => {
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    if (!activeSlides.length) return;
+    setCurrent(
+      (prev) => (prev - 1 + activeSlides.length) % activeSlides.length,
+    );
   };
 
   const handleNext = () => {
-    setCurrent((prev) => (prev + 1) % slides.length);
+    if (!activeSlides.length) return;
+    setCurrent((prev) => (prev + 1) % activeSlides.length);
   };
+
+  const slide = activeSlides[current] || activeSlides[0];
+  if (!slide) return null;
 
   return (
     <section className="relative h-[95vh] w-full overflow-hidden bg-transparent border-b border-white/5">
@@ -83,8 +51,8 @@ export default function HeroSlideshow() {
             className="absolute inset-0 w-full h-full"
           >
             <img
-              src={slides[current]?.imgSrc}
-              alt={slides[current]?.title}
+              src={slide.imgSrc}
+              alt={slide.title}
               className="hero-campaign-image w-full h-full object-cover filter brightness-[0.6] contrast-[1.1]"
             />
           </motion.div>
@@ -117,10 +85,10 @@ export default function HeroSlideshow() {
               className="space-y-4"
             >
               <p className="font-sans text-[9px] md:text-[11px] text-skims-accent tracking-[6px] uppercase font-semibold">
-                {slides[current]?.subtitle}
+                {slide.subtitle}
               </p>
               <h1 className="font-serif text-3.5xl md:text-5.5xl font-light text-white tracking-[4px] uppercase leading-tight">
-                {slides[current]?.title}
+                {slide.title}
               </h1>
             </motion.div>
           </AnimatePresence>
@@ -129,10 +97,10 @@ export default function HeroSlideshow() {
         {/* Action Controls */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto font-sans text-[9.5px] tracking-[4px] font-bold">
           <Link
-            href={slides[current]?.primaryBtnHref || "/"}
+            href={slide.primaryBtnHref || "/"}
             className="px-12 py-4.5 bg-skims-accent text-black uppercase transition-all duration-500 hover:bg-white text-center shadow-[0_4px_20px_rgba(197,168,128,0.25)] hover:scale-[1.02]"
           >
-            {slides[current]?.primaryBtnText}
+            {slide.primaryBtnText}
           </Link>
           <a
             href="#featured-selections"
@@ -165,7 +133,7 @@ export default function HeroSlideshow() {
 
       {/* Slide Indicators / Navigation Bar */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
-        {slides.map((_, idx) => (
+        {activeSlides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}

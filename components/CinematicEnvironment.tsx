@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { SiteDesignSettings } from "lib/site-design";
+import type { SiteDesignSettings } from "lib/site-design-schema";
 
 const ROOM_COUNT = 3;
 

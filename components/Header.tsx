@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Search, User, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CartModal from "components/cart/modal";
-import type { SiteDesignSettings } from "lib/site-design";
+import type { SiteDesignSettings } from "lib/site-design-schema";
 
 export default function Header({
   settings,
@@ -55,7 +55,13 @@ export default function Header({
       {/* Brand Watermark Logo - Top Center Floating */}
       <div className="fixed top-12 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none flex flex-col items-center gap-1 opacity-80">
         <div className="flex items-center gap-2">
-          <img src="/logo_3.png" alt="KSHADP outline" className="w-5 h-5 animate-float" />
+          {settings.showHeaderLogo ? (
+            <img
+              src={settings.logoUrl}
+              alt={`${settings.brandName} outline`}
+              className="w-5 h-5 animate-float"
+            />
+          ) : null}
           <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">{settings.brandName}</span>
         </div>
         <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">{settings.brandDescriptor}</span>
@@ -107,11 +113,17 @@ export default function Header({
               transition={{ duration: 0.6, ease: "easeInOut" }}
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-skims-accent/30 bg-black/40 flex items-center justify-center overflow-hidden hover:border-skims-accent/80 transition-colors"
             >
-              <img
-                src="/logo_3.png"
-                alt="Brand Mark"
-                className="w-4 h-4 sm:w-4.5 sm:h-4.5 opacity-80 group-hover:opacity-100 transition-opacity"
-              />
+              {settings.showHeaderLogo ? (
+                <img
+                  src={settings.logoUrl}
+                  alt="Brand Mark"
+                  className="w-4 h-4 sm:w-4.5 sm:h-4.5 opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+              ) : (
+                <span className="font-serif text-[10px] text-skims-accent">
+                  {settings.brandName.slice(0, 1)}
+                </span>
+              )}
             </motion.div>
             {/* Pulsing indicator */}
             <span className="absolute bottom-0 right-0 w-1.5 h-1.5 bg-skims-accent rounded-full animate-ping" />

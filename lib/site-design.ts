@@ -2,28 +2,28 @@ import { list, put } from "@vercel/blob";
 import { unstable_noStore as noStore } from "next/cache";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import {
+  defaultHeroSlides,
+  defaultHomepageSectionOrder,
+  normalizeHomepageSectionOrder,
+  type SiteDesignSettings,
+} from "./site-design-schema";
 
-export type SiteDesignSettings = {
-  brandName: string;
-  brandDescriptor: string;
-  announcement: string;
-  accentColor: string;
-  backgroundColor: string;
-  foregroundColor: string;
-  heroImageOpacity: number;
-  overlayStrength: number;
-  motionIntensity: number;
-  fogEnabled: boolean;
-  lightSweepEnabled: boolean;
-  floorReflectionEnabled: boolean;
-  grainEnabled: boolean;
-  roomImages: [string, string, string];
-  updatedAt: string;
-};
+export {
+  defaultHeroSlides,
+  defaultHomepageSectionOrder,
+  homepageSectionLabels,
+  normalizeHomepageSectionOrder,
+  type HeroSlideSettings,
+  type HomepageSectionKey,
+  type SiteDesignSettings,
+} from "./site-design-schema";
 
 export const defaultSiteDesign: SiteDesignSettings = {
   brandName: "KSHADP",
   brandDescriptor: "Atelier Cores",
+  logoUrl: "/logo_3.png",
+  showHeaderLogo: true,
   announcement: "FREE SHIPPING ON ALL ORDERS OVER $150",
   accentColor: "#C5A880",
   backgroundColor: "#0A0908",
@@ -40,6 +40,8 @@ export const defaultSiteDesign: SiteDesignSettings = {
     "/cinematic_room_2.jpg",
     "/cinematic_room_3.jpg",
   ],
+  heroSlides: defaultHeroSlides,
+  homepageSectionOrder: defaultHomepageSectionOrder,
   updatedAt: new Date(0).toISOString(),
 };
 
@@ -47,6 +49,15 @@ const blobPath = "settings/site-design.json";
 const localPath = path.join(process.cwd(), ".data", "site-design.json");
 
 function normalizeSettings(input: Partial<SiteDesignSettings>) {
+  const heroSlides =
+    input.heroSlides?.map((slide, index) => ({
+      ...defaultHeroSlides[index % defaultHeroSlides.length],
+      ...slide,
+    })) || defaultHeroSlides;
+  const homepageSectionOrder = normalizeHomepageSectionOrder(
+    input.homepageSectionOrder,
+  );
+
   return {
     ...defaultSiteDesign,
     ...input,
@@ -55,8 +66,11 @@ function normalizeSettings(input: Partial<SiteDesignSettings>) {
       input.roomImages?.[1] || defaultSiteDesign.roomImages[1],
       input.roomImages?.[2] || defaultSiteDesign.roomImages[2],
     ] as [string, string, string],
+    heroSlides,
+    homepageSectionOrder,
   };
 }
+
 
 async function readBlobSettings() {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
@@ -117,4 +131,3 @@ export async function saveSiteDesignSettings(
   await fs.writeFile(localPath, JSON.stringify(normalized, null, 2), "utf8");
   return normalized;
 }
-

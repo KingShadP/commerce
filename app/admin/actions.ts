@@ -8,6 +8,7 @@ import {
 } from "lib/admin-auth";
 import {
   defaultSiteDesign,
+  normalizeHomepageSectionOrder,
   saveSiteDesignSettings,
   type SiteDesignSettings,
 } from "lib/site-design";
@@ -46,6 +47,15 @@ function imageUrl(formData: FormData, key: string, fallback: string) {
     : fallback;
 }
 
+function sectionOrder(formData: FormData) {
+  const values = formData
+    .get("homepageSectionOrder")
+    ?.toString()
+    .split(",")
+    .map((value) => value.trim());
+  return normalizeHomepageSectionOrder(values);
+}
+
 export async function loginAdmin(formData: FormData) {
   const passcode = formData.get("passcode")?.toString() || "";
 
@@ -82,6 +92,8 @@ export async function saveDesign(
       "brandDescriptor",
       defaultSiteDesign.brandDescriptor,
     ),
+    logoUrl: imageUrl(formData, "logoUrl", defaultSiteDesign.logoUrl),
+    showHeaderLogo: formData.get("showHeaderLogo") === "on",
     announcement: text(
       formData,
       "announcement",
@@ -145,6 +157,26 @@ export async function saveDesign(
         defaultSiteDesign.roomImages[2],
       ),
     ],
+    heroSlides: defaultSiteDesign.heroSlides.map((slide, index) => ({
+      imgSrc: imageUrl(formData, `heroSlide${index}Image`, slide.imgSrc),
+      subtitle: text(
+        formData,
+        `heroSlide${index}Subtitle`,
+        slide.subtitle,
+      ),
+      title: text(formData, `heroSlide${index}Title`, slide.title),
+      primaryBtnText: text(
+        formData,
+        `heroSlide${index}ButtonText`,
+        slide.primaryBtnText,
+      ),
+      primaryBtnHref: imageUrl(
+        formData,
+        `heroSlide${index}ButtonHref`,
+        slide.primaryBtnHref,
+      ),
+    })),
+    homepageSectionOrder: sectionOrder(formData),
     updatedAt: new Date().toISOString(),
   };
 
@@ -161,4 +193,3 @@ export async function saveDesign(
     };
   }
 }
-

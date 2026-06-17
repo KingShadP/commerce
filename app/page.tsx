@@ -1,38 +1,33 @@
 import React from "react";
-import Link from "next/link";
 import { getProducts } from "lib/shopify";
 import { getMockProducts } from "lib/mock";
+import { getSiteDesignSettings } from "lib/site-design";
 import FeaturedCarousel from "components/FeaturedCarousel";
 import HeroSlideshow from "components/HeroSlideshow";
 import { ArrowRight, Sliders, Layers, Cpu, Activity } from "lucide-react";
 
-export const revalidate = 60; // Revalidate cache every 60 seconds
+export const revalidate = 60;
 
 export const metadata = {
-  description: "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men. Designed by KingShadP.",
+  description:
+    "Explore the Giragon Collection. Premium support contours, ribbed underwear, and plush heavyweight loungewear sets engineered for men. Designed by KingShadP.",
   openGraph: {
     type: "website",
   },
 };
 
 export default async function HomePage() {
-  // Fetch from Shopify or fall back to mock data
+  const settings = await getSiteDesignSettings();
   let products = await getProducts({});
 
   if (products.length === 0) {
     products = getMockProducts();
   }
 
-  // Slice for featured showcase
   const featuredProducts = products.slice(0, 8);
 
-  return (
-    <div className="flex flex-col gap-20 md:gap-32 pb-32 select-none overflow-x-hidden">
-      
-      {/* --- 1. DYNAMIC CINEMATIC SLIDESHOW HERO --- */}
-      <HeroSlideshow />
-
-      {/* --- 2. MATERIAL SPECIFICATION TICKER (Blueprint Ribbon) --- */}
+  const sections = {
+    ticker: (
       <section className="w-full overflow-hidden bg-white/[0.01] border-y border-white/5 py-4 select-none pointer-events-none">
         <div className="flex whitespace-nowrap gap-16 animate-marquee font-sans text-[7.5px] text-skims-accent/60 tracking-[4px] uppercase">
           {[...Array(4)].map((_, i) => (
@@ -47,31 +42,31 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* --- 3. SYSTEM SPECIFICATIONS LOGS (Features) --- */}
+    ),
+    features: (
       <section className="max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/5 border border-white/10 p-[1px]">
           {[
             {
               icon: Sliders,
               title: "PRESSURE CONTROLS",
-              desc: "Abdominal alignment fibers woven at 300g pressure grids to support and contour muscle postures."
+              desc: "Abdominal alignment fibers woven at 300g pressure grids to support and contour muscle postures.",
             },
             {
               icon: Activity,
               title: "ELASTICITY MEMORY",
-              desc: "Double-spun modal yarns engineered to match physical dimensions and retain memory shape for 16+ hours."
+              desc: "Double-spun modal yarns engineered to match physical dimensions and retain memory shape for 16+ hours.",
             },
             {
               icon: Layers,
               title: "THERM-FLOW WEAVE",
-              desc: "Open-cell micro ventilation channels within the modal matrix that regulate heat dissipation."
+              desc: "Open-cell micro ventilation channels within the modal matrix that regulate heat dissipation.",
             },
             {
               icon: Cpu,
               title: "SEAMLESS GEOMETRY",
-              desc: "Laser-cut panels bonded with cooling flatlock adhesives to eliminate friction along movement paths."
-            }
+              desc: "Laser-cut panels bonded with cooling flatlock adhesives to eliminate friction along movement paths.",
+            },
           ].map((feat, idx) => (
             <div
               key={feat.title}
@@ -90,12 +85,10 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* --- 4. ANATOMICAL LOOKBOOK STUDY (Asymmetrical Editorial Panel) --- */}
+    ),
+    lookbook: (
       <section className="max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
-          {/* Asymmetric Imagery - 7 columns */}
           <div className="lg:col-span-7 relative group aspect-[4/3] sm:aspect-[16/10] border border-white/10 bg-black overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=1600&auto=format&fit=crop"
@@ -103,16 +96,12 @@ export default async function HomePage() {
               className="w-full h-full object-cover opacity-30 filter grayscale contrast-125 transition-transform duration-1000 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
-            
-            {/* Interactive Vector Overlay HUD lines */}
             <div className="absolute inset-0 border border-skims-accent/10 m-3 pointer-events-none group-hover:border-skims-accent/30 transition-colors" />
-            
             <div className="absolute bottom-6 left-6 font-sans text-[8px] text-skims-accent tracking-[3px] uppercase">
               Pressure Map System
             </div>
           </div>
 
-          {/* Sizing & Core Brief Text - 5 columns */}
           <div className="lg:col-span-5 flex flex-col justify-center text-left bg-white/[0.01] border border-white/5 p-8 sm:p-12 space-y-6">
             <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
               Technical Dossier
@@ -121,7 +110,11 @@ export default async function HomePage() {
               The Accord of Shape and Utility
             </h2>
             <p className="font-sans text-[11.5px] sm:text-xs text-skims-sand/60 leading-relaxed font-light">
-              ATELIER SPEC 08 is woven from 420 GSM long-staple cotton fibers blended with modal to regulate thermal transfer. Custom circular looms lay down varying tension densities, generating zones of high compression that contour muscle silhouettes while remaining fluid to movement.
+              ATELIER SPEC 08 is woven from 420 GSM long-staple cotton fibers
+              blended with modal to regulate thermal transfer. Custom circular
+              looms lay down varying tension densities, generating zones of high
+              compression that contour muscle silhouettes while remaining fluid
+              to movement.
             </p>
             <div className="pt-2 font-sans text-[8.5px] tracking-[2px] text-skims-accent/80 space-y-1">
               <div>Fit: True to Size</div>
@@ -139,9 +132,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* --- 5. ENDLESS HORIZONTAL CAROUSEL (Cinematic Spatial Catalog) --- */}
-      <section id="featured-selections" className="w-full space-y-12 scroll-mt-24">
+    ),
+    featured: (
+      <section
+        id="featured-selections"
+        className="w-full space-y-12 scroll-mt-24"
+      >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-end border-b border-white/5 pb-6">
           <div className="space-y-2 text-left">
             <span className="font-sans text-[8px] text-skims-accent tracking-[3px] uppercase">
@@ -155,17 +151,14 @@ export default async function HomePage() {
             Drag or swipe to explore
           </div>
         </div>
-
-        {/* Snapping Carousel Client component wrapper */}
         <FeaturedCarousel products={featuredProducts} />
       </section>
-
-      {/* --- 6. SECURE NEWSLETTER INTAKE (Command Line Interface) --- */}
+    ),
+    newsletter: (
       <section className="max-w-3xl mx-auto px-6 w-full pt-12">
         <div className="glass-panel border border-white/10 p-8 sm:p-12 text-center space-y-6 relative overflow-hidden rounded-3xl shadow-xl">
           <div className="absolute top-0 right-0 w-24 h-[1px] bg-skims-accent/20" />
           <div className="absolute top-0 right-0 w-[1px] h-24 bg-skims-accent/20" />
-          
           <div className="space-y-3">
             <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
               Newsletter Registry
@@ -174,13 +167,15 @@ export default async function HomePage() {
               Secure Early Access
             </h3>
             <p className="font-sans text-[11px] text-skims-sand/45 max-w-md mx-auto leading-relaxed font-light">
-              Subscribe to receive early access updates, restock notifications, and exclusive design briefings.
+              Subscribe to receive early access updates, restock notifications,
+              and exclusive design briefings.
             </p>
           </div>
-
           <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-4">
             <div className="flex-grow flex items-center bg-black/40 border border-white/10 rounded-full px-4 py-3 hover:border-skims-accent/40 transition-colors">
-              <span className="text-[9px] font-sans text-skims-accent mr-2 font-bold">&gt;</span>
+              <span className="text-[9px] font-sans text-skims-accent mr-2 font-bold">
+                &gt;
+              </span>
               <input
                 type="email"
                 placeholder="Enter your email address..."
@@ -194,27 +189,36 @@ export default async function HomePage() {
               Register
             </button>
           </div>
-          
           <div className="text-[6.5px] font-sans text-white/15 tracking-[2px] pt-4 uppercase">
             Secure Connection Enabled
           </div>
         </div>
       </section>
-
-      {/* --- 7. BRAND ETHOS WATERMARK --- */}
+    ),
+    ethos: (
       <section className="max-w-3xl mx-auto px-6 text-center space-y-6 pt-12 select-text">
         <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
           Our Ethos
         </span>
         <p className="font-serif text-base sm:text-lg text-white/80 leading-relaxed italic font-light">
-          "Support contouring is the physical armor of the form. We configure knitwear structures that stabilize and map body shapes, enabling motion with complete anatomical trust."
+          "Support contouring is the physical armor of the form. We configure
+          knitwear structures that stabilize and map body shapes, enabling motion
+          with complete anatomical trust."
         </p>
         <div className="h-[1px] w-12 bg-skims-accent/20 mx-auto" />
         <p className="font-sans text-[7px] text-skims-sand/20 tracking-[2px] uppercase">
           KSHADP Atelier System // All Rights Reserved 2026
         </p>
       </section>
+    ),
+  };
 
+  return (
+    <div className="flex flex-col gap-20 md:gap-32 pb-32 select-none overflow-x-hidden">
+      <HeroSlideshow slides={settings.heroSlides} />
+      {settings.homepageSectionOrder.map((key) => (
+        <React.Fragment key={key}>{sections[key]}</React.Fragment>
+      ))}
     </div>
   );
 }
