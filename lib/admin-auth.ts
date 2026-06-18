@@ -26,6 +26,13 @@ export function verifyAdminPasscode(passcode: string) {
   return Boolean(expected && safeEqual(passcode, expected));
 }
 
+export function verifyAdminApiToken(authorization: string | null) {
+  const expected = process.env.ADMIN_API_TOKEN || "";
+  const token = authorization?.match(/^Bearer\s+(.+)$/i)?.[1]?.trim() || "";
+
+  return Boolean(expected && token && safeEqual(token, expected));
+}
+
 export async function createAdminSession() {
   const expires = Math.floor(Date.now() / 1000) + sessionDurationSeconds;
   const payload = `admin.${expires}`;
@@ -63,4 +70,3 @@ export async function isAdminAuthenticated() {
     safeEqual(signature || "", sign(payload))
   );
 }
-
