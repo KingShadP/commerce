@@ -78,8 +78,8 @@ export default async function CategoryPage(props: {
     <section className="w-full">
       <Suspense
         fallback={
-          <div className="font-mono text-[10px] text-skims-sand/40 uppercase">
-            // LOADING CLASSIFIED NODES...
+          <div className="font-sans text-[10px] text-skims-sand/40 uppercase tracking-[2px]">
+            Loading products...
           </div>
         }
       >

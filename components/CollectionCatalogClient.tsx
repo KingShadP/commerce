@@ -1,49 +1,70 @@
 "use client";
 
 import React, { useState } from "react";
-import { Product, ProductVariant } from "lib/shopify/types";
+import { Product } from "lib/shopify/types";
 import { useCart } from "components/cart/cart-context";
 import { addItem } from "components/cart/actions";
 import ProductCard from "components/ProductCard";
-import { Eye, Terminal } from "lucide-react";
+import { Eye, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CollectionCatalogClientProps {
   products: Product[];
 }
 
-export default function CollectionCatalogClient({ products }: CollectionCatalogClientProps) {
+export default function CollectionCatalogClient({
+  products,
+}: CollectionCatalogClientProps) {
   const { addCartItem } = useCart();
-  const [viewMode, setViewMode] = useState<"photo" | "blueprint">("photo");
-  const [tensionFilter, setTensionFilter] = useState<"all" | "base" | "sculpt" | "compress">("all");
-  const [addedProductSize, setAddedProductSize] = useState<{ [key: string]: string }>({});
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [categoryFilter, setCategoryFilter] = useState<
+    "all" | "underwear" | "loungewear" | "shapewear"
+  >("all");
+  const [addedProductSize, setAddedProductSize] = useState<{
+    [key: string]: boolean;
+  }>({});
 
-  // Filter items based on segment names / handles
+  // Filter items based on category keywords in the handle
   const filteredProducts = products.filter((p) => {
-    if (tensionFilter === "all") return true;
+    if (categoryFilter === "all") return true;
     const handle = p.handle.toLowerCase();
-    if (tensionFilter === "base") {
+    if (categoryFilter === "underwear") {
       return handle.includes("boxer") || handle.includes("underwear");
     }
-    if (tensionFilter === "sculpt") {
-      return handle.includes("hoodie") || handle.includes("pants") || handle.includes("tee");
+    if (categoryFilter === "loungewear") {
+      return (
+        handle.includes("hoodie") ||
+        handle.includes("pants") ||
+        handle.includes("tee")
+      );
     }
-    if (tensionFilter === "compress") {
-      return handle.includes("tank") || handle.includes("ls") || handle.includes("compression");
+    if (categoryFilter === "shapewear") {
+      return (
+        handle.includes("tank") ||
+        handle.includes("ls") ||
+        handle.includes("compression")
+      );
     }
     return true;
   });
 
-  const handleBlueprintAdd = async (product: Product, size: string, color: string) => {
+  const handleQuickAdd = async (
+    product: Product,
+    size: string,
+    color: string,
+  ) => {
     // Find variant matching selected size and color
     const variant = product.variants.find((v) => {
       const isColorMatch = v.selectedOptions.some(
         (o) =>
-          (o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour") &&
-          o.value.toLowerCase() === color.toLowerCase()
+          (o.name.toLowerCase() === "color" ||
+            o.name.toLowerCase() === "colour") &&
+          o.value.toLowerCase() === color.toLowerCase(),
       );
       const isSizeMatch = v.selectedOptions.some(
-        (o) => o.name.toLowerCase() === "size" && o.value.toLowerCase() === size.toLowerCase()
+        (o) =>
+          o.name.toLowerCase() === "size" &&
+          o.value.toLowerCase() === size.toLowerCase(),
       );
       return isColorMatch && isSizeMatch;
     });
@@ -51,46 +72,37 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
     const targetVariant = variant || product.variants[0];
     if (targetVariant) {
       addCartItem(targetVariant, product);
-      
+
       const key = `${product.id}-${size}`;
-      setAddedProductSize((prev) => ({ ...prev, [key]: "VERIFIED" }));
+      setAddedProductSize((prev) => ({ ...prev, [key]: true }));
       setTimeout(() => {
-        setAddedProductSize((prev) => ({ ...prev, [key]: "" }));
+        setAddedProductSize((prev) => ({ ...prev, [key]: false }));
       }, 1500);
 
       await addItem(null, targetVariant.id);
     }
   };
 
-  // Helper to extract numeric tension values for blueprint display
-  const getTensionScore = (handle: string) => {
-    if (handle.includes("boxer") || handle.includes("underwear")) return "80G/SQ_CM";
-    if (handle.includes("hoodie") || handle.includes("pants") || handle.includes("tee")) return "120G/SQ_CM";
-    return "320G/SQ_CM";
-  };
-
   return (
     <div className="space-y-10 font-sans">
-      
-      {/* Dynamic System OS Control Center Toggles */}
+      {/* Category filter + view toggle */}
       <div className="glass-panel p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 border border-white/5 select-none">
-        
-        {/* Left: Tension Filter Segment tabs */}
+        {/* Category tabs */}
         <div className="flex flex-wrap gap-2 text-[8.5px] tracking-[2px] uppercase font-bold">
           {[
-            { id: "all", label: "ALL UNITS" },
-            { id: "base", label: "BASE / LOW TENSION" },
-            { id: "sculpt", label: "SCULPT / MID RECOVERY" },
-            { id: "compress", label: "COMPRESS / HIGH SHAPE" }
+            { id: "all", label: "All" },
+            { id: "underwear", label: "Underwear" },
+            { id: "loungewear", label: "Loungewear" },
+            { id: "shapewear", label: "Shapewear" },
           ].map((tab) => {
-            const isSelected = tensionFilter === tab.id;
+            const isSelected = categoryFilter === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setTensionFilter(tab.id as any)}
+                onClick={() => setCategoryFilter(tab.id as any)}
                 className={`px-3 py-2 border rounded-full transition-all cursor-pointer ${
-                  isSelected 
-                    ? "border-skims-accent bg-skims-accent/5 text-skims-accent shadow-[0_0_8px_rgba(197,168,128,0.25)]" 
+                  isSelected
+                    ? "border-skims-accent bg-skims-accent/5 text-skims-accent shadow-[0_0_8px_rgba(197,168,128,0.25)]"
                     : "border-white/5 text-skims-sand/55 hover:text-white"
                 }`}
               >
@@ -100,30 +112,34 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
           })}
         </div>
 
-        {/* Right: Interactive Layout View Toggle */}
+        {/* Grid / List view toggle */}
         <div className="flex gap-2 bg-black/40 p-1 border border-white/10 rounded-full text-[8.5px] tracking-[1.5px] uppercase font-bold">
           <button
-            onClick={() => setViewMode("photo")}
+            onClick={() => setViewMode("grid")}
             className={`px-4 py-1.5 rounded-full flex items-center gap-1.5 transition-all cursor-pointer ${
-              viewMode === "photo" ? "bg-skims-accent text-black" : "text-skims-sand/40 hover:text-white"
+              viewMode === "grid"
+                ? "bg-skims-accent text-black"
+                : "text-skims-sand/40 hover:text-white"
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>Photo Deck</span>
+            <span>Grid</span>
           </button>
           <button
-            onClick={() => setViewMode("blueprint")}
+            onClick={() => setViewMode("list")}
             className={`px-4 py-1.5 rounded-full flex items-center gap-1.5 transition-all cursor-pointer ${
-              viewMode === "blueprint" ? "bg-skims-accent text-black" : "text-skims-sand/40 hover:text-white"
+              viewMode === "list"
+                ? "bg-skims-accent text-black"
+                : "text-skims-sand/40 hover:text-white"
             }`}
           >
-            <Terminal className="w-3.5 h-3.5" />
-            <span>Blueprint Data</span>
+            <List className="w-3.5 h-3.5" />
+            <span>List</span>
           </button>
         </div>
       </div>
 
-      {/* Grid Canvas */}
+      {/* Product grid / list */}
       <AnimatePresence mode="wait">
         {filteredProducts.length === 0 ? (
           <motion.div
@@ -134,10 +150,9 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
           >
             No products found matching this filter
           </motion.div>
-        ) : viewMode === "photo" ? (
-          /* Standard 3D card deck grid layout */
+        ) : viewMode === "grid" ? (
           <motion.div
-            key="photo-deck"
+            key="grid-view"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
@@ -149,103 +164,100 @@ export default function CollectionCatalogClient({ products }: CollectionCatalogC
             ))}
           </motion.div>
         ) : (
-          /* Wireframe Blueprint structural specs grid layout */
           <motion.div
-            key="blueprint-deck"
+            key="list-view"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-[10px] font-sans"
+            className="flex flex-col gap-3"
           >
             {filteredProducts.map((product) => {
-              // Extract colors from options
               const colorOption = product.options.find(
-                (o) => o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour"
+                (o) =>
+                  o.name.toLowerCase() === "color" ||
+                  o.name.toLowerCase() === "colour",
               );
-              const specColor = colorOption ? colorOption.values[0] || "Onyx" : "Onyx";
-              
-              // Extract sizes
-              const sizeOption = product.options.find((o) => o.name.toLowerCase() === "size");
-              const specSizes = sizeOption ? sizeOption.values : ["S", "M", "L", "XL"];
+              const specColor = colorOption
+                ? colorOption.values[0] || "Onyx"
+                : "Onyx";
+
+              const sizeOption = product.options.find(
+                (o) => o.name.toLowerCase() === "size",
+              );
+              const specSizes = sizeOption
+                ? sizeOption.values
+                : ["S", "M", "L", "XL"];
 
               const specPrice = product.priceRange.minVariantPrice.amount;
+              const currency =
+                product.priceRange.minVariantPrice.currencyCode;
+              const imgUrl =
+                product.featuredImage?.url || product.images[0]?.url || "";
 
               return (
                 <div
                   key={product.id}
-                  className="bg-black/60 border border-skims-accent/20 p-5 rounded-2xl relative flex flex-col justify-between aspect-[3/4] text-left hover:border-skims-accent transition-colors shadow-2xl overflow-hidden font-sans"
+                  className="flex items-center gap-4 sm:gap-6 bg-black/40 border border-white/5 hover:border-skims-accent/40 transition-colors rounded-xl p-4 text-left"
                 >
-                  {/* Fine HUD Grid Backdrop */}
-                  <div className="absolute inset-0 bg-grid-pattern opacity-[0.06] pointer-events-none" />
-                  
-                  {/* Corner styling reticles */}
-                  <div className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white/20 pointer-events-none" />
-                  <div className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white/20 pointer-events-none" />
-                  <div className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/20 pointer-events-none" />
-                  <div className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/20 pointer-events-none" />
-
-                  {/* Top HUD values */}
-                  <div className="flex justify-between items-center text-[7px] text-skims-sand/30 tracking-[2px] uppercase">
-                    <span>SKU: {product.id}</span>
-                    <span className="text-skims-accent">Tension: {getTensionScore(product.handle)}</span>
+                  <div className="w-16 h-20 sm:w-20 sm:h-24 bg-black border border-white/10 overflow-hidden flex-shrink-0">
+                    {imgUrl ? (
+                      <img
+                        src={imgUrl}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : null}
                   </div>
 
-                  {/* Product title specs */}
-                  <div className="space-y-4 pt-4">
-                    <div className="space-y-1">
-                      <h3 className="font-serif text-[15px] font-light text-white tracking-wide uppercase leading-tight">
-                        {product.title}
-                      </h3>
-                      <p className="text-[8px] text-skims-accent uppercase tracking-[1px]">
-                        Color: {specColor.toUpperCase()}
-                      </p>
-                    </div>
-
-                    {/* Spec log details block */}
-                    <div className="bg-white/[0.02] border border-white/5 p-3 space-y-2 text-[8px] text-skims-sand/50 uppercase tracking-[1px]">
-                      <div>Material: Woven Modal stretch blend</div>
-                      <div>Seams: Double-stitched flatlock</div>
-                      <div>Stretch: 2.5x stretch retention</div>
-                      <div>Weight: {product.handle.includes("hoodie") ? "420 GSM" : "180 GSM"}</div>
-                    </div>
+                  <div className="flex-grow min-w-0 space-y-1">
+                    <h3 className="font-serif text-sm sm:text-base text-white uppercase font-light truncate">
+                      {product.title}
+                    </h3>
+                    <p className="text-[8px] text-skims-accent uppercase tracking-[1px]">
+                      {specColor}
+                    </p>
+                    <p
+                      className={`text-[8px] uppercase tracking-[1px] ${
+                        product.availableForSale
+                          ? "text-skims-sand/35"
+                          : "text-red-400/70"
+                      }`}
+                    >
+                      {product.availableForSale ? "In Stock" : "Out of Stock"}
+                    </p>
                   </div>
 
-                  {/* Size registry buttons */}
-                  <div className="space-y-3 pt-4 border-t border-white/5">
-                    <span className="text-[7.5px] text-white/30 uppercase tracking-[2px] block">
-                      Select Sizing:
+                  <div className="hidden sm:flex gap-1.5 flex-shrink-0">
+                    {specSizes.map((size) => {
+                      const statusKey = `${product.id}-${size}`;
+                      const isAdded = addedProductSize[statusKey];
+                      return (
+                        <button
+                          key={size}
+                          onClick={() =>
+                            handleQuickAdd(product, size, specColor)
+                          }
+                          disabled={!product.availableForSale}
+                          className={`w-9 h-9 text-[9px] border transition-all text-center font-bold cursor-pointer rounded disabled:opacity-30 disabled:cursor-not-allowed ${
+                            isAdded
+                              ? "bg-green-400 border-green-400 text-black"
+                              : "border-white/10 text-white hover:border-skims-accent/60 hover:bg-skims-accent/5"
+                          }`}
+                        >
+                          {isAdded ? "✓" : size}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="text-right flex-shrink-0">
+                    <span className="text-white text-sm font-bold">
+                      ${specPrice}
                     </span>
-                    <div className="grid grid-cols-4 gap-1.5 text-[8.5px]">
-                      {specSizes.map((size) => {
-                        const statusKey = `${product.id}-${size}`;
-                        const isAdded = addedProductSize[statusKey] === "VERIFIED";
-                        return (
-                          <button
-                            key={size}
-                            onClick={() => handleBlueprintAdd(product, size, specColor)}
-                            className={`py-2 border transition-all text-center font-bold cursor-pointer rounded ${
-                              isAdded 
-                                ? "bg-green-400 border-green-400 text-black" 
-                                : "border-white/10 text-white hover:border-skims-accent/60 hover:bg-skims-accent/5"
-                            }`}
-                          >
-                            {isAdded ? "✓" : size}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Price log */}
-                  <div className="flex justify-between items-end pt-4">
-                    <div>
-                      <span className="text-[7px] text-white/20 uppercase block">Price</span>
-                      <span className="text-white text-[13px] font-bold">${specPrice}</span>
-                    </div>
-                    <span className="text-[6.5px] text-skims-sand/20 tracking-[1.5px] uppercase">
-                      In Stock
-                    </span>
+                    <p className="text-[7px] text-skims-sand/30 uppercase tracking-[1px]">
+                      {currency}
+                    </p>
                   </div>
                 </div>
               );
