@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, User, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CartModal from "components/cart/modal";
 import type { SiteDesignSettings } from "lib/site-design-schema";
@@ -20,8 +20,8 @@ export default function Header({
 
   const announcements = [
     settings.announcement,
-    "THE GIRAGON COLLECTION | CORE FOUNDATIONS AVAILABLE NOW",
-    "SUBSCRIBE FOR EARLY ACCESS TO NEW RELEASES"
+    "NEW: THE DRAGON SERIES IS HERE",
+    "SIGN UP FOR EARLY ACCESS TO NEW RELEASES",
   ];
 
   useEffect(() => {
@@ -31,8 +31,14 @@ export default function Header({
     return () => clearInterval(timer);
   }, []);
 
+  // Real shop-by-category navigation instead of a single "Shop All" link.
+  // Hrefs match the collection handles already used as fallbacks in
+  // lib/mock.ts and app/search/[collection]/page.tsx.
   const navLinks = [
-    { label: "Shop All", shortLabel: "SHOP", href: "/" }
+    { label: "Shop All", shortLabel: "SHOP", href: "/" },
+    { label: "Shapewear", shortLabel: "SHAPE", href: "/search/compression" },
+    { label: "Underwear", shortLabel: "UNDIES", href: "/search/underwear" },
+    { label: "Loungewear", shortLabel: "LOUNGE", href: "/search/loungewear" },
   ];
 
   return (
@@ -58,32 +64,36 @@ export default function Header({
           {settings.showHeaderLogo ? (
             <img
               src={settings.logoUrl}
-              alt={`${settings.brandName} outline`}
+              alt={`${settings.brandName} logo`}
               className="w-5 h-5 animate-float"
             />
           ) : null}
-          <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">{settings.brandName}</span>
+          <span className="font-serif text-[12px] text-white tracking-[6px] uppercase font-medium">
+            {settings.brandName}
+          </span>
         </div>
-        <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">{settings.brandDescriptor}</span>
+        <span className="font-sans text-[6px] text-skims-accent tracking-[3px] uppercase">
+          {settings.brandDescriptor}
+        </span>
       </div>
 
-      {/* Atelier OS Floating Bottom Navigation Dock */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-xl">
-        <motion.nav 
+      {/* Floating Bottom Navigation Dock */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-2xl">
+        <motion.nav
           initial={{ y: 50, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 26 }}
-          className="glass-panel rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between sm:justify-start gap-4 sm:gap-6 shadow-[0_12px_40px_rgba(0,0,0,0.85)] border border-white/10"
+          className="glass-panel rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between sm:justify-start gap-3 sm:gap-5 shadow-[0_12px_40px_rgba(0,0,0,0.85)] border border-white/10"
         >
           {/* Nav Links Group */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="relative px-2.5 py-1.5 transition-all text-left"
+                  className="relative px-2 py-1.5 transition-all text-left whitespace-nowrap"
                 >
                   <span className="hidden sm:inline font-sans text-[9px] tracking-[2px] uppercase text-skims-sand/65 hover:text-white font-medium transition-colors">
                     {link.label}
@@ -95,7 +105,11 @@ export default function Header({
                     <motion.div
                       layoutId="dockActiveIndicator"
                       className="absolute inset-0 bg-white/5 rounded-full -z-10 border border-white/5"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
                     />
                   )}
                 </Link>
@@ -106,8 +120,11 @@ export default function Header({
           {/* Separator Line */}
           <div className="w-[1px] h-6 bg-white/15 hidden sm:block" />
 
-          {/* Core System Brand Trigger in Dock Center */}
-          <Link href="/" className="group flex items-center justify-center p-1 relative">
+          {/* Brand Trigger in Dock Center */}
+          <Link
+            href="/"
+            className="group flex items-center justify-center p-1 relative"
+          >
             <motion.div
               whileHover={{ rotate: 180, scale: 1.1 }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -116,7 +133,7 @@ export default function Header({
               {settings.showHeaderLogo ? (
                 <img
                   src={settings.logoUrl}
-                  alt="Brand Mark"
+                  alt={`${settings.brandName} home`}
                   className="w-4 h-4 sm:w-4.5 sm:h-4.5 opacity-80 group-hover:opacity-100 transition-opacity"
                 />
               ) : (
@@ -125,9 +142,6 @@ export default function Header({
                 </span>
               )}
             </motion.div>
-            {/* Pulsing indicator */}
-            <span className="absolute bottom-0 right-0 w-1.5 h-1.5 bg-skims-accent rounded-full animate-ping" />
-            <span className="absolute bottom-0 right-0 w-1.5 h-1.5 bg-skims-accent rounded-full" />
           </Link>
 
           {/* Separator Line */}
@@ -141,31 +155,21 @@ export default function Header({
               className={`p-2 rounded-full hover:bg-white/5 hover:text-white transition-all cursor-pointer ${
                 searchOpen ? "bg-white/10 text-white" : ""
               }`}
-              aria-label="Toggle search console"
+              aria-label="Toggle search"
             >
               <Search className="w-4 h-4" />
             </button>
 
-            {/* Account Profile Link */}
-            <Link
-              href="/account"
-              className="p-2 rounded-full hover:bg-white/5 hover:text-white transition-all hidden sm:block"
-              aria-label="Access client account"
-            >
-              <User className="w-4 h-4" />
-            </Link>
-
-            {/* Shopping Cart Trigger using Vercel CartModal */}
+            {/* Shopping Cart Trigger */}
             <CartModal />
           </div>
         </motion.nav>
       </div>
 
-      {/* Frosted System Search Panel Overlay */}
+      {/* Search Panel Overlay */}
       <AnimatePresence>
         {searchOpen && (
           <>
-            {/* Search Backdrop Blur */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -173,7 +177,6 @@ export default function Header({
               onClick={() => setSearchOpen(false)}
               className="fixed inset-0 z-30 bg-black/60 backdrop-blur-md"
             />
-            {/* Search Input Card */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -189,19 +192,22 @@ export default function Header({
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && searchQuery.trim()) {
                       setSearchOpen(false);
-                      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
+                      window.location.href = `/search?q=${encodeURIComponent(
+                        searchQuery.trim(),
+                      )}`;
                     }
                   }}
-                  placeholder="Search products, hoodies, compression..."
+                  placeholder="Search products..."
                   className="flex-grow bg-transparent border-none text-[10px] font-sans tracking-widest text-white focus:outline-none placeholder:text-skims-sand/30 uppercase"
                 />
                 {searchQuery ? (
-                  <button onClick={() => setSearchQuery("")} className="text-white/40 hover:text-white">
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="text-white/40 hover:text-white"
+                  >
                     <X className="w-3.5 h-3.5" />
                   </button>
-                ) : (
-                  <span className="text-[6.5px] font-sans text-white/25 tracking-[1px]">KSHADP System</span>
-                )}
+                ) : null}
               </div>
             </motion.div>
           </>

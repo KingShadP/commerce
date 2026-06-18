@@ -6,7 +6,6 @@ import { useCart } from "components/cart/cart-context";
 import { addItem } from "components/cart/actions";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Star,
   ChevronDown,
   ChevronUp,
   ShoppingBag,
@@ -139,22 +138,21 @@ export default function ProductDetailClient({
     ) {
       return { title: "Loungewear", href: "/search/loungewear" };
     }
-    return { title: "Compression", href: "/search/compression" };
+    return { title: "Shapewear", href: "/search/compression" };
   };
 
   const collectionInfo = getCollectionPath();
 
-  // Dynamic tension outputs based on selected size
-  const getTensionLog = (size: string) => {
-    if (!size) return "Selection Pending";
-    if (size === "XXS" || size === "XS")
-      return "High Tension Shape (3.2x Stretch)";
+  // Plain-language fit guidance based on selected size, rather than
+  // pseudo-technical "tension" readouts.
+  const getFitGuidance = (size: string) => {
+    if (!size) return "Select a size";
+    if (size === "XXS" || size === "XS") return "Snug, contouring fit";
     if (size === "S" || size === "M" || size === "L")
-      return "Conforming Mid Support (2.5x Stretch)";
-    return "Relaxed Base Structure (1.8x Stretch)";
+      return "Balanced, true-to-size fit";
+    return "Relaxed, easy fit";
   };
 
-  const productSpecs = product.tags.filter((t) => t !== "mock");
   const creativeNote = product.tags
     .find((tag) => tag.startsWith("creative-note:"))
     ?.replace("creative-note:", "");
@@ -196,9 +194,6 @@ export default function ProductDetailClient({
             <div className="absolute top-6 left-6 font-sans text-[7px] text-skims-sand/30 tracking-[3px] uppercase">
               Product Detail 01
             </div>
-            <div className="absolute bottom-6 right-6 font-sans text-[6.5px] text-skims-accent/40 tracking-[2px] uppercase">
-              Secure Checkout
-            </div>
           </div>
 
           {/* Secondary Details Image Frames */}
@@ -222,12 +217,12 @@ export default function ProductDetailClient({
           ))}
         </div>
 
-        {/* Right Side: Configuration HUD Ledger */}
+        {/* Right Side: Product Info Panel */}
         <div className="w-full lg:w-[42%] lg:sticky lg:top-24 space-y-8 text-left font-sans">
           {/* Header Specifications */}
           <div className="space-y-4">
             <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
-              Anatomical Specification
+              Product Details
             </span>
             <h1 className="font-serif text-3xl md:text-4.5xl text-white tracking-wide uppercase leading-tight font-light">
               {product.title}
@@ -236,17 +231,6 @@ export default function ProductDetailClient({
             <div className="flex items-center gap-6 border-b border-white/5 pb-6">
               <div className="text-2xl text-white font-medium font-sans">
                 ${price}
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-skims-sand/40">
-                <div className="flex text-skims-accent">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-3 h-3 fill-skims-accent stroke-none"
-                    />
-                  ))}
-                </div>
-                <span>4.9 (142 reviews)</span>
               </div>
             </div>
 
@@ -260,7 +244,7 @@ export default function ProductDetailClient({
             ) : null}
           </div>
 
-          {/* 1. Hue/Alloy Calibration */}
+          {/* 1. Color selection */}
           <div className="space-y-3 bg-white/[0.01] border border-white/5 p-4 rounded-2xl">
             <div className="flex justify-between items-center text-[9px] uppercase tracking-[2px] text-skims-sand/50 font-bold">
               <span>Color:</span>
@@ -293,7 +277,7 @@ export default function ProductDetailClient({
             </div>
           </div>
 
-          {/* 2. Sizing Contour Calibration */}
+          {/* 2. Size selection */}
           <div className="space-y-4 bg-white/[0.01] border border-white/5 p-4 rounded-2xl">
             <div className="flex justify-between items-center text-[9px] uppercase tracking-[2px] text-skims-sand/50 font-bold">
               <span>Size:</span>
@@ -325,15 +309,15 @@ export default function ProductDetailClient({
               })}
             </div>
 
-            {/* Real-time structural feedback readout */}
+            {/* Plain-language fit readout */}
             <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[7.5px] font-sans text-skims-sand/40">
-              <span className="text-white/20">Tension:</span>
+              <span className="text-white/20">Fit:</span>
               <span
                 className={
                   selectedSize ? "text-skims-accent font-bold" : "text-white/20"
                 }
               >
-                {getTensionLog(selectedSize)}
+                {getFitGuidance(selectedSize)}
               </span>
             </div>
 
@@ -344,7 +328,7 @@ export default function ProductDetailClient({
             )}
           </div>
 
-          {/* Add to Bag System Trigger */}
+          {/* Add to Bag */}
           <div className="pt-2">
             <motion.button
               onClick={handleAddToBag}
@@ -377,7 +361,7 @@ export default function ProductDetailClient({
 
           {/* Sizing & Material Accordion Systems */}
           <div className="border-t border-white/10 pt-6 space-y-4 font-sans">
-            {/* Accordion 1: Material ledger */}
+            {/* Accordion 1: Fabric & Materials */}
             <div className="border border-white/5 bg-white/[0.01] rounded-xl overflow-hidden">
               <button
                 onClick={() => toggleAccordion("fabric")}
@@ -401,31 +385,28 @@ export default function ProductDetailClient({
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light space-y-2 select-text border-t border-white/5 pt-4">
                       <p>
-                        Woven from dynamic long-staple cotton-modal fibers to
-                        achieve a soft touch with shape recovery properties.
+                        Made from a soft cotton-modal blend that keeps its
+                        shape wear after wear.
                       </p>
-                      {productSpecs.length > 0 && (
-                        <ul className="list-disc pl-4 font-sans text-[9px] space-y-1 text-skims-accent/80">
-                          {productSpecs.map((spec, i) => (
-                            <li key={i}>{spec}</li>
-                          ))}
-                          <li>Flatlock cooling friction-free seams</li>
-                          <li>High stretch recovery index</li>
-                        </ul>
-                      )}
+                      <ul className="list-disc pl-4 font-sans text-[9px] space-y-1 text-skims-accent/80">
+                        <li>Smooth, flat seams to prevent chafing</li>
+                        <li>
+                          High stretch recovery — keeps its shape over time
+                        </li>
+                      </ul>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Accordion 2: Tension fit */}
+            {/* Accordion 2: Fit Guide */}
             <div className="border border-white/5 bg-white/[0.01] rounded-xl overflow-hidden">
               <button
                 onClick={() => toggleAccordion("fit")}
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
-                <span>Fit & Compression Guide</span>
+                <span>Fit Guide</span>
                 {openAccordion === "fit" ? (
                   <ChevronUp className="w-4 h-4 text-skims-accent" />
                 ) : (
@@ -443,9 +424,9 @@ export default function ProductDetailClient({
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light select-text border-t border-white/5 pt-4">
                       <p>
-                        Fits true to size. For maximum torso compression and
-                        definition contouring, we recommend sizing down one
-                        frame. Designed to stretch up to 2.5x its static shape.
+                        Fits true to size. For a snugger, more contoured
+                        fit, we recommend sizing down one size. Stretches up
+                        to 2.5x for a comfortable, supportive fit.
                       </p>
                     </div>
                   </motion.div>
@@ -453,7 +434,7 @@ export default function ProductDetailClient({
               </AnimatePresence>
             </div>
 
-            {/* Accordion 3: Logistics dispatch */}
+            {/* Accordion 3: Shipping & Returns */}
             <div className="border border-white/5 bg-white/[0.01] rounded-xl overflow-hidden">
               <button
                 onClick={() => toggleAccordion("shipping")}
@@ -477,10 +458,9 @@ export default function ProductDetailClient({
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light select-text border-t border-white/5 pt-4">
                       <p>
-                        Worldwide dispatch in secure, biodegradable packaging.
-                        Free standard shipping is auto-applied to all orders
-                        exceeding $150. Returns accepted within 14 days of
-                        receipt delivery.
+                        We ship worldwide in eco-friendly packaging. Free
+                        standard shipping on orders over $150. Returns
+                        accepted within 14 days of delivery.
                       </p>
                     </div>
                   </motion.div>
@@ -491,7 +471,7 @@ export default function ProductDetailClient({
         </div>
       </div>
 
-      {/* Sticky Bottom Add to Bag Bar - Overlapping Protection */}
+      {/* Sticky Bottom Add to Bag Bar */}
       <AnimatePresence>
         {showStickyBar && (
           <motion.div

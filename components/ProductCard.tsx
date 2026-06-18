@@ -6,7 +6,6 @@ import { Product, ProductVariant } from "lib/shopify/types";
 import { useCart } from "components/cart/cart-context";
 import { addItem } from "components/cart/actions";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -110,6 +109,16 @@ export default function ProductCard({ product }: ProductCardProps) {
   const price = product.priceRange.minVariantPrice.amount;
   const currency = product.priceRange.minVariantPrice.currencyCode;
 
+  // Plain-language badge. Real per-product badges can still be set from the
+  // admin design studio via the "creative:" tag — this is just the fallback.
+  const badge =
+    product.tags
+      .find((tag) => tag.startsWith("creative:"))
+      ?.replace("creative:", "") ||
+    (product.handle.includes("boxer") || product.handle.includes("tank")
+      ? "Limited Edition"
+      : "Essential");
+
   return (
     <Link
       href={`/product/${product.handle}`}
@@ -127,14 +136,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         }}
         onMouseMove={handleMouseMove}
       >
-        {/* Scarcity Brand Badge */}
+        {/* Badge */}
         <div className="absolute top-3 left-3 z-10 border border-skims-accent/30 bg-[#0A0908]/85 backdrop-blur-sm px-2.5 py-1 font-mono text-[6.5px] tracking-[2px] text-skims-accent uppercase font-bold select-none pointer-events-none">
-          {product.tags
-            .find((tag) => tag.startsWith("creative:"))
-            ?.replace("creative:", "") ||
-            (product.handle.includes("boxer") || product.handle.includes("tank")
-              ? "LIMITED RUN"
-              : "CORE SERIES")}
+          {badge}
         </div>
 
         {/* Crossfading hover images */}
@@ -236,20 +240,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-serif text-base tracking-wide text-white uppercase font-light">
             {product.title}
           </h3>
-
-          <div className="flex items-center gap-1.5">
-            <div className="flex text-skims-accent items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-2.5 h-2.5 fill-skims-accent stroke-none"
-                />
-              ))}
-            </div>
-            <span className="text-[8px] font-mono text-skims-sand/40">
-              4.9 (142 reviews)
-            </span>
-          </div>
         </div>
 
         {/* Price Tag */}
