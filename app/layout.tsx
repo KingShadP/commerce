@@ -1,12 +1,10 @@
+import AppChrome from "components/AppChrome";
 import { CartProvider } from "components/cart/cart-context";
 import CinematicEnvironment from "components/CinematicEnvironment";
-import Header from "components/Header";
-import { WelcomeToast } from "components/welcome-toast";
 import { Outfit, Playfair_Display } from "next/font/google";
 import { getCart } from "lib/shopify";
 import { getSiteDesignSettings } from "lib/site-design";
 import { CSSProperties, ReactNode } from "react";
-import { Toaster } from "sonner";
 import "./globals.css";
 import { baseUrl } from "lib/utils";
 import SmoothScrollProvider from "components/SmoothScrollProvider";
@@ -76,15 +74,7 @@ export default async function RootLayout({
           <CartProvider cartPromise={cart}>
             <CinematicEnvironment settings={design} />
 
-            {/* Bottom Navigation Dock Header */}
-            <Header settings={design} />
-
-            {/* Page Contents */}
-            <main className="flex-grow pt-7 relative z-20">
-              {children}
-              <Toaster closeButton />
-              <WelcomeToast />
-            </main>
+            <AppChrome settings={design}>{children}</AppChrome>
           </CartProvider>
         </SmoothScrollProvider>
       </body>
