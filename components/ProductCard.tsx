@@ -14,17 +14,19 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addCartItem } = useCart();
-  
+
   // Extract colors
   const colorOption = product.options.find(
-    (o) => o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour"
+    (o) =>
+      o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour",
   );
   const colorNames = colorOption ? colorOption.values : ["Onyx"];
   const colors = colorNames.map((colName) => {
     let hex = "#A39382"; // default clay
     const lower = colName.toLowerCase();
     if (lower === "onyx") hex = "#12100E";
-    else if (lower === "concrete" || lower === "grey" || lower === "gray") hex = "#A8A39D";
+    else if (lower === "concrete" || lower === "grey" || lower === "gray")
+      hex = "#A8A39D";
     else if (lower === "cocoa" || lower === "brown") hex = "#5C4F44";
     else if (lower === "sand" || lower === "cream") hex = "#E6DEC9";
     else if (lower === "clay") hex = "#AC9E8F";
@@ -32,11 +34,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   });
 
   // Extract sizes
-  const sizeOption = product.options.find((o) => o.name.toLowerCase() === "size");
+  const sizeOption = product.options.find(
+    (o) => o.name.toLowerCase() === "size",
+  );
   const sizes = sizeOption ? sizeOption.values : ["S", "M", "L", "XL"];
 
   // Image assets
-  const imgUrl = product.featuredImage?.url || (product.images[0]?.url || "");
+  const imgUrl = product.featuredImage?.url || product.images[0]?.url || "";
   const gallery = product.images.map((img) => img.url);
 
   const [selectedColor, setSelectedColor] = useState(colors[0]?.name || "Onyx");
@@ -64,11 +68,14 @@ export default function ProductCard({ product }: ProductCardProps) {
     const variant = product.variants.find((v) => {
       const isColorMatch = v.selectedOptions.some(
         (o) =>
-          (o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour") &&
-          o.value.toLowerCase() === selectedColor.toLowerCase()
+          (o.name.toLowerCase() === "color" ||
+            o.name.toLowerCase() === "colour") &&
+          o.value.toLowerCase() === selectedColor.toLowerCase(),
       );
       const isSizeMatch = v.selectedOptions.some(
-        (o) => o.name.toLowerCase() === "size" && o.value.toLowerCase() === sizeName.toLowerCase()
+        (o) =>
+          o.name.toLowerCase() === "size" &&
+          o.value.toLowerCase() === sizeName.toLowerCase(),
       );
       return isColorMatch && isSizeMatch;
     });
@@ -122,9 +129,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       >
         {/* Scarcity Brand Badge */}
         <div className="absolute top-3 left-3 z-10 border border-skims-accent/30 bg-[#0A0908]/85 backdrop-blur-sm px-2.5 py-1 font-mono text-[6.5px] tracking-[2px] text-skims-accent uppercase font-bold select-none pointer-events-none">
-          {product.handle.includes("boxer") || product.handle.includes("tank")
-            ? "LIMITED RUN"
-            : "CORE SERIES"}
+          {product.tags
+            .find((tag) => tag.startsWith("creative:"))
+            ?.replace("creative:", "") ||
+            (product.handle.includes("boxer") || product.handle.includes("tank")
+              ? "LIMITED RUN"
+              : "CORE SERIES")}
         </div>
 
         {/* Crossfading hover images */}
@@ -191,7 +201,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="mt-4 flex justify-between items-start gap-4">
         <div className="space-y-1.5 flex-grow">
           {/* Swatches Container */}
-          <div className="flex gap-2 items-center select-none" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex gap-2 items-center select-none"
+            onClick={(e) => e.stopPropagation()}
+          >
             {colors.map((color) => {
               const isSelected = selectedColor === color.name;
               return (
@@ -227,10 +240,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center gap-1.5">
             <div className="flex text-skims-accent items-center">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-2.5 h-2.5 fill-skims-accent stroke-none" />
+                <Star
+                  key={i}
+                  className="w-2.5 h-2.5 fill-skims-accent stroke-none"
+                />
               ))}
             </div>
-            <span className="text-[8px] font-mono text-skims-sand/40">4.9 (142 reviews)</span>
+            <span className="text-[8px] font-mono text-skims-sand/40">
+              4.9 (142 reviews)
+            </span>
           </div>
         </div>
 

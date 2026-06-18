@@ -5,17 +5,32 @@ import path from "node:path";
 import {
   defaultHeroSlides,
   defaultHomepageSectionOrder,
+  defaultMediaLibrary,
+  defaultPageCreatives,
+  defaultProductCreatives,
+  normalizeMediaLibrary,
   normalizeHomepageSectionOrder,
+  normalizePageCreatives,
+  normalizeProductCreatives,
   type SiteDesignSettings,
 } from "./site-design-schema";
 
 export {
   defaultHeroSlides,
   defaultHomepageSectionOrder,
+  defaultMediaLibrary,
+  defaultPageCreatives,
+  defaultProductCreatives,
   homepageSectionLabels,
+  normalizeMediaLibrary,
   normalizeHomepageSectionOrder,
+  normalizePageCreatives,
+  normalizeProductCreatives,
   type HeroSlideSettings,
   type HomepageSectionKey,
+  type MediaAssetSettings,
+  type PageCreativeSettings,
+  type ProductCreativeSettings,
   type SiteDesignSettings,
 } from "./site-design-schema";
 
@@ -41,6 +56,9 @@ export const defaultSiteDesign: SiteDesignSettings = {
     "/cinematic_room_3.jpg",
   ],
   heroSlides: defaultHeroSlides,
+  mediaLibrary: defaultMediaLibrary,
+  pageCreatives: defaultPageCreatives,
+  productCreatives: defaultProductCreatives,
   homepageSectionOrder: defaultHomepageSectionOrder,
   updatedAt: new Date(0).toISOString(),
 };
@@ -57,6 +75,9 @@ function normalizeSettings(input: Partial<SiteDesignSettings>) {
   const homepageSectionOrder = normalizeHomepageSectionOrder(
     input.homepageSectionOrder,
   );
+  const mediaLibrary = normalizeMediaLibrary(input.mediaLibrary);
+  const pageCreatives = normalizePageCreatives(input.pageCreatives);
+  const productCreatives = normalizeProductCreatives(input.productCreatives);
 
   return {
     ...defaultSiteDesign,
@@ -67,10 +88,12 @@ function normalizeSettings(input: Partial<SiteDesignSettings>) {
       input.roomImages?.[2] || defaultSiteDesign.roomImages[2],
     ] as [string, string, string],
     heroSlides,
+    mediaLibrary,
+    pageCreatives,
+    productCreatives,
     homepageSectionOrder,
   };
 }
-
 
 async function readBlobSettings() {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
@@ -89,9 +112,7 @@ async function readBlobSettings() {
 async function readLocalSettings() {
   try {
     const value = await fs.readFile(localPath, "utf8");
-    return normalizeSettings(
-      JSON.parse(value) as Partial<SiteDesignSettings>,
-    );
+    return normalizeSettings(JSON.parse(value) as Partial<SiteDesignSettings>);
   } catch {
     return null;
   }
@@ -111,9 +132,7 @@ export async function getSiteDesignSettings() {
   }
 }
 
-export async function saveSiteDesignSettings(
-  settings: SiteDesignSettings,
-) {
+export async function saveSiteDesignSettings(settings: SiteDesignSettings) {
   const normalized = normalizeSettings(settings);
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {

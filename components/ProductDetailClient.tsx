@@ -5,26 +5,38 @@ import { Product, ProductVariant } from "lib/shopify/types";
 import { useCart } from "components/cart/cart-context";
 import { addItem } from "components/cart/actions";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronDown, ChevronUp, ShoppingBag, Ruler, Check, ChevronRight } from "lucide-react";
+import {
+  Star,
+  ChevronDown,
+  ChevronUp,
+  ShoppingBag,
+  Ruler,
+  Check,
+  ChevronRight,
+} from "lucide-react";
 import Link from "next/link";
 
 interface ProductDetailClientProps {
   product: Product;
 }
 
-export default function ProductDetailClient({ product }: ProductDetailClientProps) {
+export default function ProductDetailClient({
+  product,
+}: ProductDetailClientProps) {
   const { addCartItem } = useCart();
 
   // Extract colors from options
   const colorOption = product.options.find(
-    (o) => o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour"
+    (o) =>
+      o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour",
   );
   const colorNames = colorOption ? colorOption.values : ["Onyx"];
   const colors = colorNames.map((colName) => {
     let hex = "#A39382"; // default clay
     const lower = colName.toLowerCase();
     if (lower === "onyx") hex = "#12100E";
-    else if (lower === "concrete" || lower === "grey" || lower === "gray") hex = "#A8A39D";
+    else if (lower === "concrete" || lower === "grey" || lower === "gray")
+      hex = "#A8A39D";
     else if (lower === "cocoa" || lower === "brown") hex = "#5C4F44";
     else if (lower === "sand" || lower === "cream") hex = "#E6DEC9";
     else if (lower === "clay") hex = "#AC9E8F";
@@ -32,11 +44,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   });
 
   // Extract sizes
-  const sizeOption = product.options.find((o) => o.name.toLowerCase() === "size");
+  const sizeOption = product.options.find(
+    (o) => o.name.toLowerCase() === "size",
+  );
   const sizes = sizeOption ? sizeOption.values : ["S", "M", "L", "XL"];
 
   // Image & Price details
-  const imgUrl = product.featuredImage?.url || (product.images[0]?.url || "");
+  const imgUrl = product.featuredImage?.url || product.images[0]?.url || "";
   const gallery = product.images.map((img) => img.url);
   const price = product.priceRange.minVariantPrice.amount;
   const currency = product.priceRange.minVariantPrice.currencyCode;
@@ -82,11 +96,14 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     const variant = product.variants.find((v) => {
       const isColorMatch = v.selectedOptions.some(
         (o) =>
-          (o.name.toLowerCase() === "color" || o.name.toLowerCase() === "colour") &&
-          o.value.toLowerCase() === selectedColor.toLowerCase()
+          (o.name.toLowerCase() === "color" ||
+            o.name.toLowerCase() === "colour") &&
+          o.value.toLowerCase() === selectedColor.toLowerCase(),
       );
       const isSizeMatch = v.selectedOptions.some(
-        (o) => o.name.toLowerCase() === "size" && o.value.toLowerCase() === selectedSize.toLowerCase()
+        (o) =>
+          o.name.toLowerCase() === "size" &&
+          o.value.toLowerCase() === selectedSize.toLowerCase(),
       );
       return isColorMatch && isSizeMatch;
     });
@@ -95,7 +112,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     if (targetVariant) {
       addCartItem(targetVariant, product);
       await addItem(null, targetVariant.id);
-      
+
       setAdding(false);
       setAddedSuccess(true);
       setTimeout(() => setAddedSuccess(false), 2000);
@@ -109,10 +126,17 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   };
 
   const getCollectionPath = () => {
-    if (product.handle.includes("boxer") || product.handle.includes("underwear")) {
+    if (
+      product.handle.includes("boxer") ||
+      product.handle.includes("underwear")
+    ) {
       return { title: "Underwear", href: "/search/underwear" };
     }
-    if (product.handle.includes("hoodie") || product.handle.includes("pants") || product.handle.includes("tee")) {
+    if (
+      product.handle.includes("hoodie") ||
+      product.handle.includes("pants") ||
+      product.handle.includes("tee")
+    ) {
       return { title: "Loungewear", href: "/search/loungewear" };
     }
     return { title: "Compression", href: "/search/compression" };
@@ -123,30 +147,39 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   // Dynamic tension outputs based on selected size
   const getTensionLog = (size: string) => {
     if (!size) return "Selection Pending";
-    if (size === "XXS" || size === "XS") return "High Tension Shape (3.2x Stretch)";
-    if (size === "S" || size === "M" || size === "L") return "Conforming Mid Support (2.5x Stretch)";
+    if (size === "XXS" || size === "XS")
+      return "High Tension Shape (3.2x Stretch)";
+    if (size === "S" || size === "M" || size === "L")
+      return "Conforming Mid Support (2.5x Stretch)";
     return "Relaxed Base Structure (1.8x Stretch)";
   };
 
-  const productSpecs = product.tags.filter(t => t !== "mock");
+  const productSpecs = product.tags.filter((t) => t !== "mock");
+  const creativeNote = product.tags
+    .find((tag) => tag.startsWith("creative-note:"))
+    ?.replace("creative-note:", "");
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 md:py-16 space-y-12 select-none">
-      
       {/* Breadcrumb Navigation - Low Profile HUD style */}
       <div className="flex items-center gap-2 font-sans text-[8.5px] text-skims-sand/40 uppercase tracking-[2px] select-none text-left">
-        <Link href="/" className="hover:text-white transition-colors">Home</Link>
+        <Link href="/" className="hover:text-white transition-colors">
+          Home
+        </Link>
         <ChevronRight className="w-3 h-3" />
-        <Link href={collectionInfo.href} className="hover:text-white transition-colors">{collectionInfo.title}</Link>
+        <Link
+          href={collectionInfo.href}
+          className="hover:text-white transition-colors"
+        >
+          {collectionInfo.title}
+        </Link>
         <ChevronRight className="w-3 h-3" />
         <span className="text-skims-accent">{product.title}</span>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-        
         {/* Left Side: Dynamic Spatial Photo Frame stack */}
         <div className="w-full lg:w-[58%] grid grid-cols-1 md:grid-cols-2 gap-4">
-          
           {/* Main Visualizer Image Frame with Corner HUD Reticles */}
           <div className="md:col-span-2 aspect-[3/4] border border-white/10 bg-black overflow-hidden relative">
             <img
@@ -191,7 +224,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
         {/* Right Side: Configuration HUD Ledger */}
         <div className="w-full lg:w-[42%] lg:sticky lg:top-24 space-y-8 text-left font-sans">
-          
           {/* Header Specifications */}
           <div className="space-y-4">
             <span className="font-sans text-[8px] text-skims-accent tracking-[4px] uppercase block">
@@ -200,7 +232,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <h1 className="font-serif text-3xl md:text-4.5xl text-white tracking-wide uppercase leading-tight font-light">
               {product.title}
             </h1>
-            
+
             <div className="flex items-center gap-6 border-b border-white/5 pb-6">
               <div className="text-2xl text-white font-medium font-sans">
                 ${price}
@@ -208,7 +240,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <div className="flex items-center gap-1.5 text-xs text-skims-sand/40">
                 <div className="flex text-skims-accent">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-skims-accent stroke-none" />
+                    <Star
+                      key={i}
+                      className="w-3 h-3 fill-skims-accent stroke-none"
+                    />
                   ))}
                 </div>
                 <span>4.9 (142 reviews)</span>
@@ -218,6 +253,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <p className="font-sans text-[13px] text-skims-sand/65 leading-relaxed font-light select-text pt-2">
               {product.description}
             </p>
+            {creativeNote ? (
+              <div className="border border-skims-accent/20 bg-skims-accent/5 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-skims-accent">
+                {creativeNote}
+              </div>
+            ) : null}
           </div>
 
           {/* 1. Hue/Alloy Calibration */}
@@ -234,7 +274,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     key={color.name}
                     onClick={() => setSelectedColor(color.name)}
                     className={`w-7 h-7 rounded-full border flex items-center justify-center transition-all cursor-pointer relative ${
-                      isSelected ? "border-skims-accent scale-110 shadow-[0_0_8px_rgba(197,168,128,0.4)]" : "border-white/10 hover:border-white/30"
+                      isSelected
+                        ? "border-skims-accent scale-110 shadow-[0_0_8px_rgba(197,168,128,0.4)]"
+                        : "border-white/10 hover:border-white/30"
                     }`}
                     title={color.name}
                   >
@@ -260,7 +302,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 <span>SIZE GUIDE</span>
               </button>
             </div>
-            
+
             <div className="grid grid-cols-4 gap-2 text-xs">
               {sizes.map((size) => {
                 const isSelected = selectedSize === size;
@@ -282,15 +324,19 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 );
               })}
             </div>
-            
+
             {/* Real-time structural feedback readout */}
             <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[7.5px] font-sans text-skims-sand/40">
               <span className="text-white/20">Tension:</span>
-              <span className={selectedSize ? "text-skims-accent font-bold" : "text-white/20"}>
+              <span
+                className={
+                  selectedSize ? "text-skims-accent font-bold" : "text-white/20"
+                }
+              >
                 {getTensionLog(selectedSize)}
               </span>
             </div>
-            
+
             {sizeError && (
               <p className="text-[9px] text-red-400 uppercase tracking-[1.5px] animate-pulse">
                 ⚠️ Please select a size to proceed.
@@ -331,7 +377,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
           {/* Sizing & Material Accordion Systems */}
           <div className="border-t border-white/10 pt-6 space-y-4 font-sans">
-            
             {/* Accordion 1: Material ledger */}
             <div className="border border-white/5 bg-white/[0.01] rounded-xl overflow-hidden">
               <button
@@ -339,9 +384,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
                 <span>Fabric & Materials</span>
-                {openAccordion === "fabric" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
+                {openAccordion === "fabric" ? (
+                  <ChevronUp className="w-4 h-4 text-skims-accent" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
               </button>
-              
+
               <AnimatePresence>
                 {openAccordion === "fabric" && (
                   <motion.div
@@ -351,7 +400,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     className="overflow-hidden"
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light space-y-2 select-text border-t border-white/5 pt-4">
-                      <p>Woven from dynamic long-staple cotton-modal fibers to achieve a soft touch with shape recovery properties.</p>
+                      <p>
+                        Woven from dynamic long-staple cotton-modal fibers to
+                        achieve a soft touch with shape recovery properties.
+                      </p>
                       {productSpecs.length > 0 && (
                         <ul className="list-disc pl-4 font-sans text-[9px] space-y-1 text-skims-accent/80">
                           {productSpecs.map((spec, i) => (
@@ -374,9 +426,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
                 <span>Fit & Compression Guide</span>
-                {openAccordion === "fit" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
+                {openAccordion === "fit" ? (
+                  <ChevronUp className="w-4 h-4 text-skims-accent" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
               </button>
-              
+
               <AnimatePresence>
                 {openAccordion === "fit" && (
                   <motion.div
@@ -387,7 +443,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light select-text border-t border-white/5 pt-4">
                       <p>
-                        Fits true to size. For maximum torso compression and definition contouring, we recommend sizing down one frame. Designed to stretch up to 2.5x its static shape.
+                        Fits true to size. For maximum torso compression and
+                        definition contouring, we recommend sizing down one
+                        frame. Designed to stretch up to 2.5x its static shape.
                       </p>
                     </div>
                   </motion.div>
@@ -402,9 +460,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 className="w-full p-4 flex justify-between items-center text-[9px] tracking-[2px] uppercase text-white hover:bg-white/[0.02] cursor-pointer"
               >
                 <span>Shipping & Returns</span>
-                {openAccordion === "shipping" ? <ChevronUp className="w-4 h-4 text-skims-accent" /> : <ChevronDown className="w-4 h-4" />}
+                {openAccordion === "shipping" ? (
+                  <ChevronUp className="w-4 h-4 text-skims-accent" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
               </button>
-              
+
               <AnimatePresence>
                 {openAccordion === "shipping" && (
                   <motion.div
@@ -415,18 +477,18 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   >
                     <div className="p-4 pt-0 text-[11.5px] font-sans text-skims-sand/65 leading-relaxed font-light select-text border-t border-white/5 pt-4">
                       <p>
-                        Worldwide dispatch in secure, biodegradable packaging. Free standard shipping is auto-applied to all orders exceeding $150. Returns accepted within 14 days of receipt delivery.
+                        Worldwide dispatch in secure, biodegradable packaging.
+                        Free standard shipping is auto-applied to all orders
+                        exceeding $150. Returns accepted within 14 days of
+                        receipt delivery.
                       </p>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       {/* Sticky Bottom Add to Bag Bar - Overlapping Protection */}
@@ -440,11 +502,18 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             className="fixed bottom-0 left-0 right-0 z-30 bg-[#0A0908]/90 backdrop-blur-md border-t border-white/10 py-3.5 px-6 flex items-center justify-between gap-4 max-w-7xl mx-auto shadow-[0_-10px_30px_rgba(0,0,0,0.85)]"
           >
             <div className="flex items-center gap-4 text-left">
-              <img src={activeImg} alt={product.title} className="w-9 h-11 object-cover border border-white/10 hidden sm:block" />
+              <img
+                src={activeImg}
+                alt={product.title}
+                className="w-9 h-11 object-cover border border-white/10 hidden sm:block"
+              />
               <div>
-                <h4 className="font-serif text-[11px] uppercase tracking-wide text-white font-medium">{product.title}</h4>
+                <h4 className="font-serif text-[11px] uppercase tracking-wide text-white font-medium">
+                  {product.title}
+                </h4>
                 <p className="text-[8.5px] text-skims-sand/40 uppercase tracking-[1px] mt-0.5 font-sans">
-                  ${price} / {selectedColor} {selectedSize ? `/ Size ${selectedSize}` : ""}
+                  ${price} / {selectedColor}{" "}
+                  {selectedSize ? `/ Size ${selectedSize}` : ""}
                 </p>
               </div>
             </div>
@@ -452,7 +521,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <div className="flex items-center gap-3">
               {!selectedSize ? (
                 <div className="flex items-center gap-1 hidden sm:flex">
-                  {sizes.map(size => (
+                  {sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
@@ -463,7 +532,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   ))}
                 </div>
               ) : null}
-              
+
               <button
                 onClick={handleAddToBag}
                 disabled={adding}

@@ -5,7 +5,9 @@ import {
   ImageIcon,
   ListOrdered,
   LogOut,
+  Package,
   Palette,
+  FileText,
   RotateCcw,
   Save,
   SlidersHorizontal,
@@ -15,6 +17,9 @@ import {
   defaultHeroSlides,
   homepageSectionLabels,
   type HomepageSectionKey,
+  type MediaAssetSettings,
+  type PageCreativeSettings,
+  type ProductCreativeSettings,
   type SiteDesignSettings,
 } from "lib/site-design-schema";
 import { useActionState, useState } from "react";
@@ -23,6 +28,7 @@ import {
   saveDesign,
   type SaveDesignState,
 } from "app/admin/actions";
+import type { DragEvent } from "react";
 
 const initialActionState: SaveDesignState = {
   status: "idle",
@@ -68,6 +74,76 @@ function Toggle({
   );
 }
 
+function UploadDropzone({
+  label,
+  scope,
+  onUploaded,
+}: {
+  label: string;
+  scope: string;
+  onUploaded: (url: string) => void;
+}) {
+  const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle");
+
+  const uploadFile = async (file: File) => {
+    setStatus("uploading");
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("scope", scope);
+
+    const response = await fetch("/api/admin/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      setStatus("error");
+      return;
+    }
+
+    const result = (await response.json()) as { url: string };
+    onUploaded(result.url);
+    setStatus("idle");
+  };
+
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files.item(0);
+    if (file) void uploadFile(file);
+  };
+
+  return (
+    <label
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={handleDrop}
+      className="block cursor-pointer rounded-xl border border-dashed border-white/15 bg-black/25 px-3 py-3 text-center transition hover:border-skims-accent/60"
+    >
+      <input
+        type="file"
+        accept="image/*,video/mp4,video/webm"
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.item(0);
+          if (file) void uploadFile(file);
+          event.target.value = "";
+        }}
+      />
+      <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-white/55">
+        {status === "uploading" ? "Uploading..." : label}
+      </span>
+      <span
+        className={`mt-1 block text-[10px] ${
+          status === "error" ? "text-red-300" : "text-white/30"
+        }`}
+      >
+        {status === "error"
+          ? "Upload failed. Check Blob token."
+          : "Drop media or click to choose a file."}
+      </span>
+    </label>
+  );
+}
+
 export default function AdminDesignStudio({
   initialSettings,
   storageMode,
@@ -75,8 +151,7 @@ export default function AdminDesignStudio({
   initialSettings: SiteDesignSettings;
   storageMode: "Vercel Blob" | "Local development";
 }) {
-  const [settings, setSettings] =
-    useState<SiteDesignSettings>(initialSettings);
+  const [settings, setSettings] = useState<SiteDesignSettings>(initialSettings);
   const [state, action, pending] = useActionState(
     saveDesign,
     initialActionState,
@@ -89,11 +164,7 @@ export default function AdminDesignStudio({
 
   const updateRoom = (index: number, value: string) => {
     setSettings((current) => {
-      const roomImages = [...current.roomImages] as [
-        string,
-        string,
-        string,
-      ];
+      const roomImages = [...current.roomImages] as [string, string, string];
       roomImages[index] = value;
       return { ...current, roomImages };
     });
@@ -117,14 +188,57 @@ export default function AdminDesignStudio({
     });
   };
 
+  const updateMedia = (
+    index: number,
+    key: keyof MediaAssetSettings,
+    value: string,
+  ) => {
+    setSettings((current) => {
+      const mediaLibrary = [...current.mediaLibrary];
+      mediaLibrary[index] = {
+        ...current.mediaLibrary[index]!,
+        [key]: value,
+      };
+      return { ...current, mediaLibrary };
+    });
+  };
+
+  const updatePageCreative = (
+    index: number,
+    key: keyof PageCreativeSettings,
+    value: string,
+  ) => {
+    setSettings((current) => {
+      const pageCreatives = [...current.pageCreatives];
+      pageCreatives[index] = {
+        ...current.pageCreatives[index]!,
+        [key]: value,
+      };
+      return { ...current, pageCreatives };
+    });
+  };
+
+  const updateProductCreative = (
+    index: number,
+    key: keyof ProductCreativeSettings,
+    value: string | string[],
+  ) => {
+    setSettings((current) => {
+      const productCreatives = [...current.productCreatives];
+      productCreatives[index] = {
+        ...current.productCreatives[index]!,
+        [key]: value,
+      };
+      return { ...current, productCreatives };
+    });
+  };
+
   const updateSectionOrder = (value: string) => {
     const allowed = new Set(Object.keys(homepageSectionLabels));
     const ordered = value
       .split(",")
       .map((item) => item.trim())
-      .filter((item): item is HomepageSectionKey =>
-        allowed.has(item),
-      );
+      .filter((item): item is HomepageSectionKey => allowed.has(item));
 
     update("homepageSectionOrder", ordered);
   };
@@ -158,7 +272,10 @@ export default function AdminDesignStudio({
           </div>
         </header>
 
-        <form action={action} className="mt-8 grid gap-8 xl:grid-cols-[460px_1fr]">
+        <form
+          action={action}
+          className="mt-8 grid gap-8 xl:grid-cols-[460px_1fr]"
+        >
           <div className="space-y-5">
             <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5 shadow-2xl">
               <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
@@ -255,11 +372,7 @@ export default function AdminDesignStudio({
                           name={`heroSlide${index}${suffix}`}
                           value={String(slide[key])}
                           onChange={(event) =>
-                            updateHeroSlide(
-                              index,
-                              key,
-                              event.target.value,
-                            )
+                            updateHeroSlide(index, key, event.target.value)
                           }
                           className="h-10 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-xs outline-none transition focus:border-skims-accent"
                         />
@@ -272,25 +385,238 @@ export default function AdminDesignStudio({
 
             <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
               <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
+                <ImageIcon className="h-4 w-4 text-skims-accent" />
+                Media board
+              </h2>
+              <p className="mt-3 text-xs leading-5 text-white/40">
+                Store reusable image or video URLs for campaigns, product swaps,
+                and page heroes.
+              </p>
+              <div className="mt-5 space-y-4">
+                {settings.mediaLibrary.map((asset, index) => (
+                  <div
+                    key={asset.id}
+                    className="grid gap-3 rounded-2xl border border-white/8 bg-black/20 p-4"
+                  >
+                    <div className="aspect-video overflow-hidden rounded-xl border border-white/10 bg-black">
+                      {asset.kind === "image" ? (
+                        <img
+                          src={asset.url}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="grid h-full place-items-center text-[8px] uppercase tracking-[0.22em] text-white/30">
+                          Video asset
+                        </div>
+                      )}
+                    </div>
+                    {(
+                      [
+                        ["label", "Label"],
+                        ["url", "Media URL"],
+                        ["alt", "Alt text"],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <label key={key}>
+                        <span className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/45">
+                          {label}
+                        </span>
+                        <input
+                          name={`media${index}${key[0]!.toUpperCase()}${key.slice(1)}`}
+                          value={String(asset[key as keyof MediaAssetSettings])}
+                          onChange={(event) =>
+                            updateMedia(
+                              index,
+                              key as keyof MediaAssetSettings,
+                              event.target.value,
+                            )
+                          }
+                          className="h-10 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-xs outline-none transition focus:border-skims-accent"
+                        />
+                        {key === "url" ? (
+                          <div className="mt-2">
+                            <UploadDropzone
+                              label="Upload media"
+                              scope={`media-${asset.id}`}
+                              onUploaded={(url) =>
+                                updateMedia(index, "url", url)
+                              }
+                            />
+                          </div>
+                        ) : null}
+                      </label>
+                    ))}
+                    <input
+                      type="hidden"
+                      name={`media${index}Id`}
+                      value={asset.id}
+                    />
+                    <input
+                      type="hidden"
+                      name={`media${index}Kind`}
+                      value={asset.kind}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
+              <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
+                <FileText className="h-4 w-4 text-skims-accent" />
+                Page creative
+              </h2>
+              <p className="mt-3 text-xs leading-5 text-white/40">
+                Match Shopify page handles and control the hero treatment above
+                the page body.
+              </p>
+              <div className="mt-5 space-y-4">
+                {settings.pageCreatives.map((page, index) => (
+                  <div
+                    key={`${page.handle}-${index}`}
+                    className="space-y-3 rounded-2xl border border-white/8 bg-black/20 p-4"
+                  >
+                    {(
+                      [
+                        ["handle", "Page handle"],
+                        ["eyebrow", "Eyebrow"],
+                        ["title", "Hero title"],
+                        ["heroImage", "Hero image URL"],
+                        ["intro", "Intro copy"],
+                        ["ctaText", "CTA text"],
+                        ["ctaHref", "CTA href"],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <label key={key}>
+                        <span className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/45">
+                          {label}
+                        </span>
+                        <input
+                          name={`page${index}${key[0]!.toUpperCase()}${key.slice(1)}`}
+                          value={String(
+                            page[key as keyof PageCreativeSettings],
+                          )}
+                          onChange={(event) =>
+                            updatePageCreative(
+                              index,
+                              key as keyof PageCreativeSettings,
+                              event.target.value,
+                            )
+                          }
+                          className="h-10 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-xs outline-none transition focus:border-skims-accent"
+                        />
+                        {key === "heroImage" ? (
+                          <div className="mt-2">
+                            <UploadDropzone
+                              label="Upload page hero"
+                              scope={`page-${page.handle}`}
+                              onUploaded={(url) =>
+                                updatePageCreative(index, "heroImage", url)
+                              }
+                            />
+                          </div>
+                        ) : null}
+                      </label>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
+              <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
+                <Package className="h-4 w-4 text-skims-accent" />
+                Product imaging
+              </h2>
+              <p className="mt-3 text-xs leading-5 text-white/40">
+                Match product handles and override catalog, carousel, related,
+                and product-detail imagery.
+              </p>
+              <div className="mt-5 space-y-4">
+                {settings.productCreatives.map((product, index) => (
+                  <div
+                    key={`${product.handle}-${index}`}
+                    className="space-y-3 rounded-2xl border border-white/8 bg-black/20 p-4"
+                  >
+                    {(
+                      [
+                        ["handle", "Product handle"],
+                        ["badge", "Card badge"],
+                        ["heroImage", "Hero image URL"],
+                        ["hoverImage", "Hover image URL"],
+                        ["detailNote", "PDP creative note"],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <label key={key}>
+                        <span className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/45">
+                          {label}
+                        </span>
+                        <input
+                          name={`product${index}${key[0]!.toUpperCase()}${key.slice(1)}`}
+                          value={String(
+                            product[key as keyof ProductCreativeSettings],
+                          )}
+                          onChange={(event) =>
+                            updateProductCreative(
+                              index,
+                              key as keyof ProductCreativeSettings,
+                              event.target.value,
+                            )
+                          }
+                          className="h-10 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-xs outline-none transition focus:border-skims-accent"
+                        />
+                        {key === "heroImage" || key === "hoverImage" ? (
+                          <div className="mt-2">
+                            <UploadDropzone
+                              label={
+                                key === "heroImage"
+                                  ? "Upload product hero"
+                                  : "Upload hover image"
+                              }
+                              scope={`product-${product.handle}-${key}`}
+                              onUploaded={(url) =>
+                                updateProductCreative(index, key, url)
+                              }
+                            />
+                          </div>
+                        ) : null}
+                      </label>
+                    ))}
+                    <label>
+                      <span className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/45">
+                        Gallery image URLs
+                      </span>
+                      <textarea
+                        name={`product${index}GalleryImages`}
+                        value={product.galleryImages.join(",")}
+                        onChange={(event) =>
+                          updateProductCreative(
+                            index,
+                            "galleryImages",
+                            event.target.value
+                              .split(",")
+                              .map((url) => url.trim()),
+                          )
+                        }
+                        rows={3}
+                        className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs leading-5 outline-none transition focus:border-skims-accent"
+                      />
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-white/10 bg-[#11100e]/90 p-5">
+              <h2 className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em]">
                 <SlidersHorizontal className="h-4 w-4 text-skims-accent" />
                 Atmosphere
               </h2>
               <div className="mt-5 space-y-5">
                 {[
-                  [
-                    "heroImageOpacity",
-                    "Campaign image opacity",
-                    0,
-                    0.8,
-                    0.01,
-                  ],
-                  [
-                    "overlayStrength",
-                    "Text safety overlay",
-                    0.25,
-                    0.95,
-                    0.01,
-                  ],
+                  ["heroImageOpacity", "Campaign image opacity", 0, 0.8, 0.01],
+                  ["overlayStrength", "Text safety overlay", 0.25, 0.95, 0.01],
                   ["motionIntensity", "Motion intensity", 0, 1.5, 0.05],
                 ].map(([name, label, min, max, step]) => (
                   <label key={String(name)} className="block">
@@ -308,9 +634,7 @@ export default function AdminDesignStudio({
                       min={Number(min)}
                       max={Number(max)}
                       step={Number(step)}
-                      value={Number(
-                        settings[name as keyof SiteDesignSettings],
-                      )}
+                      value={Number(settings[name as keyof SiteDesignSettings])}
                       onChange={(event) =>
                         update(
                           name as

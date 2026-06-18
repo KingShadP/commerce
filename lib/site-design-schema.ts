@@ -6,6 +6,33 @@ export type HeroSlideSettings = {
   primaryBtnHref: string;
 };
 
+export type MediaAssetSettings = {
+  id: string;
+  label: string;
+  url: string;
+  alt: string;
+  kind: "image" | "video";
+};
+
+export type PageCreativeSettings = {
+  handle: string;
+  eyebrow: string;
+  title: string;
+  heroImage: string;
+  intro: string;
+  ctaText: string;
+  ctaHref: string;
+};
+
+export type ProductCreativeSettings = {
+  handle: string;
+  badge: string;
+  heroImage: string;
+  hoverImage: string;
+  galleryImages: string[];
+  detailNote: string;
+};
+
 export type HomepageSectionKey =
   | "ticker"
   | "features"
@@ -32,6 +59,9 @@ export type SiteDesignSettings = {
   grainEnabled: boolean;
   roomImages: [string, string, string];
   heroSlides: HeroSlideSettings[];
+  mediaLibrary: MediaAssetSettings[];
+  pageCreatives: PageCreativeSettings[];
+  productCreatives: ProductCreativeSettings[];
   homepageSectionOrder: HomepageSectionKey[];
   updatedAt: string;
 };
@@ -92,6 +122,72 @@ export const defaultHeroSlides: HeroSlideSettings[] = [
   },
 ];
 
+export const defaultMediaLibrary: MediaAssetSettings[] = [
+  {
+    id: "campaign-dragon",
+    label: "Dragon campaign still",
+    url: "/slide-dragon-1.jpg",
+    alt: "Dragon campaign product atmosphere",
+    kind: "image",
+  },
+  {
+    id: "atelier-room",
+    label: "Atelier room",
+    url: "/cinematic_room_1.jpg",
+    alt: "Dark architectural atelier room",
+    kind: "image",
+  },
+  {
+    id: "product-study",
+    label: "Product study",
+    url: "/slide-dragon-3.jpg",
+    alt: "Product campaign study",
+    kind: "image",
+  },
+];
+
+export const defaultPageCreatives: PageCreativeSettings[] = [
+  {
+    handle: "about",
+    eyebrow: "Brand dossier",
+    title: "The Sanctum archive",
+    heroImage: "/cinematic_room_2.jpg",
+    intro:
+      "Control page-level atmosphere, campaign media, and editorial direction from the admin console.",
+    ctaText: "Explore collection",
+    ctaHref: "/search",
+  },
+  {
+    handle: "contact",
+    eyebrow: "Client channel",
+    title: "Private support desk",
+    heroImage: "/cinematic_room_3.jpg",
+    intro:
+      "Shape page intros and calls to action without changing Shopify page body copy.",
+    ctaText: "Shop all",
+    ctaHref: "/search",
+  },
+];
+
+export const defaultProductCreatives: ProductCreativeSettings[] = [
+  {
+    handle: "dragon-anatomy-t-shirt-vintage-scientific-illustration-tee",
+    badge: "Dragon edit",
+    heroImage: "/slide-dragon-1.jpg",
+    hoverImage: "/slide-dragon-2.jpg",
+    galleryImages: ["/slide-dragon-1.jpg", "/slide-dragon-2.jpg"],
+    detailNote: "Custom creative direction controlled from the admin console.",
+  },
+  {
+    handle: "embroidered-chest-dragon-hoodie-minimal-crest-fleece-pullover",
+    badge: "Crest study",
+    heroImage: "/slide-dragon-4.jpg",
+    hoverImage: "/slide-dragon-5.jpg",
+    galleryImages: ["/slide-dragon-4.jpg", "/slide-dragon-5.jpg"],
+    detailNote: "Use product handles to override PDP and catalog imagery.",
+  },
+];
+
 export function normalizeHomepageSectionOrder(
   input?: string[] | HomepageSectionKey[],
 ): HomepageSectionKey[] {
@@ -104,4 +200,71 @@ export function normalizeHomepageSectionOrder(
     ...ordered,
     ...defaultHomepageSectionOrder.filter((key) => !ordered.includes(key)),
   ];
+}
+
+export function normalizeMediaLibrary(
+  input?: Partial<MediaAssetSettings>[],
+): MediaAssetSettings[] {
+  const assets = input?.length ? input : defaultMediaLibrary;
+  return assets
+    .slice(0, 12)
+    .map(
+      (asset, index): MediaAssetSettings => ({
+        id: asset.id || `media-${index + 1}`,
+        label: asset.label || `Media ${index + 1}`,
+        url:
+          asset.url ||
+          defaultMediaLibrary[index % defaultMediaLibrary.length]!.url,
+        alt: asset.alt || asset.label || `Media ${index + 1}`,
+        kind: asset.kind === "video" ? "video" : "image",
+      }),
+    )
+    .filter((asset) => asset.url);
+}
+
+export function normalizePageCreatives(
+  input?: Partial<PageCreativeSettings>[],
+): PageCreativeSettings[] {
+  const pages = input?.length ? input : defaultPageCreatives;
+  return pages
+    .slice(0, 10)
+    .map((page, index) => ({
+      handle:
+        page.handle ||
+        defaultPageCreatives[index % defaultPageCreatives.length]!.handle,
+      eyebrow: page.eyebrow || "Page system",
+      title: page.title || "Editorial page",
+      heroImage:
+        page.heroImage ||
+        defaultPageCreatives[index % defaultPageCreatives.length]!.heroImage,
+      intro: page.intro || "",
+      ctaText: page.ctaText || "Explore",
+      ctaHref: page.ctaHref || "/search",
+    }))
+    .filter((page) => page.handle);
+}
+
+export function normalizeProductCreatives(
+  input?: Partial<ProductCreativeSettings>[],
+): ProductCreativeSettings[] {
+  const products = input?.length ? input : defaultProductCreatives;
+  return products
+    .slice(0, 16)
+    .map((product, index) => ({
+      handle:
+        product.handle ||
+        defaultProductCreatives[index % defaultProductCreatives.length]!.handle,
+      badge: product.badge || "Core series",
+      heroImage:
+        product.heroImage ||
+        defaultProductCreatives[index % defaultProductCreatives.length]!
+          .heroImage,
+      hoverImage: product.hoverImage || product.heroImage || "",
+      galleryImages: (product.galleryImages || [])
+        .map((url) => url.trim())
+        .filter(Boolean)
+        .slice(0, 6),
+      detailNote: product.detailNote || "",
+    }))
+    .filter((product) => product.handle);
 }

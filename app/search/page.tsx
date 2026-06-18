@@ -1,7 +1,9 @@
 import Grid from "components/grid";
 import ProductGridItems from "components/layout/product-grid-items";
+import { applyProductCreatives } from "lib/creative-overrides";
 import { defaultSort, sorting } from "lib/constants";
 import { getProducts } from "lib/shopify";
+import { getSiteDesignSettings } from "lib/site-design";
 
 export const metadata = {
   title: "Search",
@@ -16,7 +18,11 @@ export default async function SearchPage(props: {
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
-  const products = await getProducts({ sortKey, reverse, query: searchValue });
+  const [design, fetchedProducts] = await Promise.all([
+    getSiteDesignSettings(),
+    getProducts({ sortKey, reverse, query: searchValue }),
+  ]);
+  const products = applyProductCreatives(fetchedProducts, design);
   const resultsText = products.length > 1 ? "results" : "result";
 
   return (

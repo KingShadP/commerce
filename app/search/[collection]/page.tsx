@@ -1,5 +1,7 @@
 import { getCollection, getCollectionProducts } from "lib/shopify";
+import { applyProductCreatives } from "lib/creative-overrides";
 import { getMockProducts, getMockCollections } from "lib/mock";
+import { getSiteDesignSettings } from "lib/site-design";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CollectionCatalogClient from "components/CollectionCatalogClient";
@@ -37,7 +39,8 @@ export default async function CategoryPage(props: {
   const { sort } = searchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-    
+  const design = await getSiteDesignSettings();
+
   let products = await getCollectionProducts({
     collection: params.collection,
     sortKey,
@@ -48,19 +51,38 @@ export default async function CategoryPage(props: {
     const mockProducts = getMockProducts();
     const handle = params.collection.toLowerCase();
     if (handle === "compression") {
-      products = mockProducts.filter((p) => p.handle.includes("tank") || p.handle.includes("ls") || p.handle.includes("compression"));
+      products = mockProducts.filter(
+        (p) =>
+          p.handle.includes("tank") ||
+          p.handle.includes("ls") ||
+          p.handle.includes("compression"),
+      );
     } else if (handle === "loungewear") {
-      products = mockProducts.filter((p) => p.handle.includes("hoodie") || p.handle.includes("pants") || p.handle.includes("tee"));
+      products = mockProducts.filter(
+        (p) =>
+          p.handle.includes("hoodie") ||
+          p.handle.includes("pants") ||
+          p.handle.includes("tee"),
+      );
     } else if (handle === "underwear") {
-      products = mockProducts.filter((p) => p.handle.includes("boxer") || p.handle.includes("underwear"));
+      products = mockProducts.filter(
+        (p) => p.handle.includes("boxer") || p.handle.includes("underwear"),
+      );
     } else {
       products = mockProducts;
     }
   }
+  products = applyProductCreatives(products, design);
 
   return (
     <section className="w-full">
-      <Suspense fallback={<div className="font-mono text-[10px] text-skims-sand/40 uppercase">// LOADING CLASSIFIED NODES...</div>}>
+      <Suspense
+        fallback={
+          <div className="font-mono text-[10px] text-skims-sand/40 uppercase">
+            // LOADING CLASSIFIED NODES...
+          </div>
+        }
+      >
         <CollectionCatalogClient products={products} />
       </Suspense>
     </section>

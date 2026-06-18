@@ -2,6 +2,7 @@ import React from "react";
 import { getProducts } from "lib/shopify";
 import { getMockProducts } from "lib/mock";
 import { getSiteDesignSettings } from "lib/site-design";
+import { applyProductCreatives } from "lib/creative-overrides";
 import FeaturedCarousel from "components/FeaturedCarousel";
 import HeroSlideshow from "components/HeroSlideshow";
 import { ArrowRight, Sliders, Layers, Cpu, Activity } from "lucide-react";
@@ -24,6 +25,7 @@ export default async function HomePage() {
     products = getMockProducts();
   }
 
+  products = applyProductCreatives(products, settings);
   const featuredProducts = products.slice(0, 8);
 
   const sections = {
@@ -202,8 +204,8 @@ export default async function HomePage() {
         </span>
         <p className="font-serif text-base sm:text-lg text-white/80 leading-relaxed italic font-light">
           "Support contouring is the physical armor of the form. We configure
-          knitwear structures that stabilize and map body shapes, enabling motion
-          with complete anatomical trust."
+          knitwear structures that stabilize and map body shapes, enabling
+          motion with complete anatomical trust."
         </p>
         <div className="h-[1px] w-12 bg-skims-accent/20 mx-auto" />
         <p className="font-sans text-[7px] text-skims-sand/20 tracking-[2px] uppercase">

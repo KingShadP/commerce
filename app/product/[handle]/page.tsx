@@ -1,9 +1,14 @@
 import Footer from "components/layout/footer";
 import ProductDetailClient from "components/ProductDetailClient";
 import ProductCard from "components/ProductCard";
+import {
+  applyProductCreative,
+  applyProductCreatives,
+} from "lib/creative-overrides";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
 import { getProduct, getProductRecommendations } from "lib/shopify";
 import { getMockProducts } from "lib/mock";
+import { getSiteDesignSettings } from "lib/site-design";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -13,6 +18,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const params = await props.params;
   let product = await getProduct(params.handle);
+  const design = await getSiteDesignSettings();
 
   if (!product) {
     const mockProducts = getMockProducts();
@@ -20,6 +26,7 @@ export async function generateMetadata(props: {
   }
 
   if (!product) return notFound();
+  product = applyProductCreative(product, design);
 
   const { url, width, height, altText: alt } = product.featuredImage || {};
   const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
@@ -55,6 +62,7 @@ export default async function ProductPage(props: {
 }) {
   const params = await props.params;
   let product = await getProduct(params.handle);
+  const design = await getSiteDesignSettings();
 
   if (!product) {
     const mockProducts = getMockProducts();
@@ -62,6 +70,7 @@ export default async function ProductPage(props: {
   }
 
   if (!product) return notFound();
+  product = applyProductCreative(product, design);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -88,15 +97,21 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      
+
       <div className="w-full">
-        <Suspense fallback={<div className="h-screen flex items-center justify-center font-mono text-xs uppercase text-skims-sand/40">Loading Fit Station...</div>}>
+        <Suspense
+          fallback={
+            <div className="h-screen flex items-center justify-center font-mono text-xs uppercase text-skims-sand/40">
+              Loading Fit Station...
+            </div>
+          }
+        >
           <ProductDetailClient product={product} />
         </Suspense>
-        
+
         <div className="max-w-7xl mx-auto px-6 border-t border-white/5 mt-16 pt-16">
           <Suspense fallback={null}>
-            <RelatedProducts id={product.id} />
+            <RelatedProducts id={product.id} design={design} />
           </Suspense>
         </div>
       </div>
@@ -105,7 +120,13 @@ export default async function ProductPage(props: {
   );
 }
 
-async function RelatedProducts({ id }: { id: string }) {
+async function RelatedProducts({
+  id,
+  design,
+}: {
+  id: string;
+  design: Awaited<ReturnType<typeof getSiteDesignSettings>>;
+}) {
   let relatedProducts = await getProductRecommendations(id);
 
   if (!relatedProducts || relatedProducts.length === 0) {
@@ -113,6 +134,7 @@ async function RelatedProducts({ id }: { id: string }) {
     const mockProducts = getMockProducts();
     relatedProducts = mockProducts.filter((p) => p.id !== id).slice(0, 4);
   }
+  relatedProducts = applyProductCreatives(relatedProducts, design);
 
   if (!relatedProducts.length) return null;
 
@@ -128,7 +150,7 @@ async function RelatedProducts({ id }: { id: string }) {
           </h2>
         </div>
       </div>
-      
+
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 pt-1">
         {relatedProducts.map((product) => (
           <li key={product.handle} className="w-full">
