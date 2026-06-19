@@ -1,0 +1,24 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [
+    "static/chunks/db598_next_dist_build_polyfills_polyfill-nomodule.js"
+  ],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [
+    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_8eb64009._.js",
+    "static/chunks/29aa2_dist_compiled_react-dom-experimental_cjs_react-dom-client_development_e0ab498b.js",
+    "static/chunks/db598_next_dist_compiled_react-dom-experimental_cjs_react-dom_development_b58c98ac.js",
+    "static/chunks/db598_next_dist_compiled_react-dom-experimental_a58c7142._.js",
+    "static/chunks/db598_next_dist_compiled_react-server-dom-turbopack-experimental_c9c52e78._.js",
+    "static/chunks/db598_next_dist_compiled_next-devtools_index_4fd74f96.js",
+    "static/chunks/db598_next_dist_compiled_9d9eda36._.js",
+    "static/chunks/db598_next_dist_client_65ec2182._.js",
+    "static/chunks/db598_next_dist_b399a09a._.js",
+    "static/chunks/db598_@swc_helpers_cjs_508997e3._.js",
+    "static/chunks/OneDrive_Desktop_the-sanctum_a0ff3932._.js",
+    "static/chunks/turbopack-OneDrive_Desktop_the-sanctum_b490491a._.js"
+  ],
+  "pages": {},
+  "ampFirstPages": []
+}

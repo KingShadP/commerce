@@ -1,0 +1,11 @@
+{
+  "remoteName": "origin",
+  "projects": [
+    {
+      "id": "prj_PXsDkE273aRvd6WMVVTF5Mq5vN3G",
+      "name": "nextjs-commerce",
+      "directory": ".",
+      "orgId": "team_0kLVvyQL2SLzfjEp0SuzuS4Z"
+    }
+  ]
+}

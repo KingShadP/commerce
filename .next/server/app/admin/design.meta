@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "headers": {
+    "link": "</_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/design/layout,_N_T_/admin/design/page,_N_T_/admin/design"
+  },
+  "postponed": "723:[0,{\"nextSegmentId\":0,\"rootFormatContext\":{\"insertionMode\":0,\"selectedValue\":null,\"tagScope\":0,\"viewTransition\":null},\"progressiveChunkSize\":12800,\"resumableState\":{\"idPrefix\":\"\",\"nextFormID\":0,\"streamingFormat\":0,\"bootstrapScripts\":[{\"src\":\"/_next/static/chunks/797eaedf430f9a83.js\"}],\"instructions\":0,\"hasBody\":false,\"hasHtml\":false,\"unknownResources\":{\"font\":{\"/_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2\":[],\"/_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2\":[]}},\"dnsResources\":{},\"connectResources\":{\"default\":{},\"anonymous\":{},\"credentials\":{}},\"imageResources\":{},\"styleResources\":{},\"scriptResources\":{},\"moduleUnknownResources\":{},\"moduleScriptResources\":{}},\"replayNodes\":[],\"replaySlots\":-1}]null",
+  "segmentPaths": [
+    "/_tree",
+    "/admin/design/__PAGE__",
+    "/admin/design",
+    "/admin",
+    "/_index"
+  ]
+}

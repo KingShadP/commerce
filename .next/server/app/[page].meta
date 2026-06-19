@@ -1,0 +1,16 @@
+{
+  "status": 200,
+  "headers": {
+    "link": "</_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/[page]/layout,_N_T_/[page]/page,collections"
+  },
+  "postponed": "1584:46[[\"page\",[\"%%drp:page:cc634fc9012228%%\",\"d\"]]][0,{\"nextSegmentId\":0,\"rootFormatContext\":{\"insertionMode\":0,\"selectedValue\":null,\"tagScope\":0,\"viewTransition\":null},\"progressiveChunkSize\":12800,\"resumableState\":{\"idPrefix\":\"\",\"nextFormID\":0,\"streamingFormat\":0,\"bootstrapScripts\":[{\"src\":\"/_next/static/chunks/797eaedf430f9a83.js\"}],\"instructions\":0,\"hasBody\":false,\"hasHtml\":false,\"unknownResources\":{\"font\":{\"/_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2\":[],\"/_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2\":[]}},\"dnsResources\":{},\"connectResources\":{\"default\":{},\"anonymous\":{},\"credentials\":{}},\"imageResources\":{},\"styleResources\":{},\"scriptResources\":{\"/_next/static/chunks/b92a46a3e6ea94ad.js\":null,\"/_next/static/chunks/4adb18eb02ed1249.js\":null,\"/_next/static/chunks/6fec3a116696239f.js\":null,\"/_next/static/chunks/14bc89b8e367f2fc.js\":null},\"moduleUnknownResources\":{},\"moduleScriptResources\":{}},\"replayNodes\":[[\"aY\",0,[[\"Context\",0,[[\"Context\",0,[[\"ServerInsertedHTMLProvider\",0,[[\"Context\",0,[[\"n8\",0,[[\"nX\",0,[[\"nV\",0,[[\"nG\",0,[[\"n4\",0,[[\"Fragment\",0,[[\"Context\",2,[[\"Context\",0,[[\"Context\",0,[[\"Context\",0,[[\"Context\",0,[[\"Context\",0,[[\"nX\",0,[[\"nV\",0,[[\"nG\",0,[[\"nC\",0,[[\"nR\",0,[[\"n3\",\"/page|%%drp:page:cc634fc9012228%%|d/__PAGE__\",[[\"Fragment\",\"h\",[[\"div\",2,[[\"__next_metadata_boundary__\",0,[[\"Suspense\",0,[],1,[\"Suspense Fallback\",0,[],null],1]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],null]],\"replaySlots\":-1}]eJwdj02LwjAUAP/LO6dLam2+wIOuIiuIsIe9WA8xedUuNZH0VSql/33pXoeBYUboKCYEM0KN5O5gxomBs+7+z84VnNapj+/d934ffg543JZif9cVsAoc1+JaaKuU9kLVssh9WUgvuV4sUQltXYlcen3lFbBzBQEHyn67rE4xEAaf1TESpuyBoa/gcpmDL9v2CAaO29gcduvh6xaHU0v+87ZaAQOytw7MGVxsW3TUxNDBhUFHtkUwBecMqHlgR/bxBJNLlUsplCpzlX+oYqEY4PBs5l/Bl2rWE75s23hLCEaJJefTxACDS+8nod/EPvh1mqPjNE1/9v9fVQ==",
+  "segmentPaths": [
+    "/_tree",
+    "/$d$page/__PAGE__",
+    "/$d$page",
+    "/_index"
+  ]
+}

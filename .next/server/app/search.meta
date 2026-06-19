@@ -1,0 +1,16 @@
+{
+  "status": 200,
+  "headers": {
+    "link": "</_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/search/layout,_N_T_/search/page,_N_T_/search,collections"
+  },
+  "postponed": "723:[0,{\"nextSegmentId\":0,\"rootFormatContext\":{\"insertionMode\":0,\"selectedValue\":null,\"tagScope\":0,\"viewTransition\":null},\"progressiveChunkSize\":12800,\"resumableState\":{\"idPrefix\":\"\",\"nextFormID\":0,\"streamingFormat\":0,\"bootstrapScripts\":[{\"src\":\"/_next/static/chunks/797eaedf430f9a83.js\"}],\"instructions\":0,\"hasBody\":false,\"hasHtml\":false,\"unknownResources\":{\"font\":{\"/_next/static/media/1b99372b3eaef0c8-s.p.758e15a8.woff2\":[],\"/_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2\":[]}},\"dnsResources\":{},\"connectResources\":{\"default\":{},\"anonymous\":{},\"credentials\":{}},\"imageResources\":{},\"styleResources\":{},\"scriptResources\":{},\"moduleUnknownResources\":{},\"moduleScriptResources\":{}},\"replayNodes\":[],\"replaySlots\":-1}]eJydkttum0AURf9lnnE0MFwGS3nwFUMNVpzEGOI8zDCDPZibDBgcy/9e0SZVqkZV1ddzjrTX2jpXUNXFiYPhFcS8jg5geL1JICLR4cfsZQdWo1NTXGZry8o3Dnenmm4dzB2QdiCCpk6RSTA2mY5jA8lMQwYzoKmoHOsmiTQODWZSuAPSyw7kvKsHSTWIT0Ve85wN4qKo+WmQ8bzZgdfXPvBM0oaDIXCnhXBmo87eF90qrdlkf38PJFCTfQWGLyAq0pRHtSjyCrxKoKpJysEQQSiBWmS8qklWgqFsYNkwdIw1Gct3GClYArwrRe+rQxX35yd+JqlgpOZgiHUVwpv0d2sMY4qRihBUCFQQRbGmcJUSqmLODINFKtI03TRo3Fv/1cqws8OBZusqfLR1W9iVna9LZnWpnRTiwe8qW7QitDZvAXLKaLEuqaKKlXDG1Gr30cI5h4tNwhauWE6ct9DHYpVXglkppNbzx12/O4ZbL4mytGVWeqbC1u3jvKKTcRtl5pH5HowujrmcOG2wXRd99hJ5abB1EjLpmTZtaM1h6K/HbGLrdmK3bhLU7jSo3afDs/s00t3pTHeToPGejrIvHHO5qASx5k347hIq6SXw2ZkKOaFKV4W+B4lvNr3fJ94F2TqHUDEbe+adqdWlAfrp/LUDK6Nsnr/vf/n/0VemydRqP3VbNszvqvixFWw7PgbbdRrO5rDndJPRxROw9QTsVvOH1p0WrZsU7WpeiK/7MfMP5qX/O3O8gd/+/2N1VVPukIr+6WNvEuB5dLqUNWfjosnZ6NSHXm+323dlu0Rz",
+  "segmentPaths": [
+    "/_tree",
+    "/search/__PAGE__",
+    "/search",
+    "/_index"
+  ]
+}

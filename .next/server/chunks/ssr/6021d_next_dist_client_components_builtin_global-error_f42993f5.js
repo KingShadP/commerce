@@ -1,0 +1,3 @@
+module.exports=[81091,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(88134);a.n(d("[project]/OneDrive/Desktop/the-sanctum/node_modules/.pnpm/next@15.6.0-canary.60_react_60c2d962eb59e8fdc3ce5782532c32a4/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},88206,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(88134);a.n(d("[project]/OneDrive/Desktop/the-sanctum/node_modules/.pnpm/next@15.6.0-canary.60_react_60c2d962eb59e8fdc3ce5782532c32a4/node_modules/next/dist/client/components/builtin/global-error.js"))},1676,a=>{"use strict";a.i(81091);var b=a.i(88206);a.n(b)}];
+
+//# sourceMappingURL=6021d_next_dist_client_components_builtin_global-error_f42993f5.js.map

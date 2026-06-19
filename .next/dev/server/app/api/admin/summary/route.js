@@ -1,0 +1,12 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/admin/summary/route.js")
+R.c("server/chunks/6021d_next_dist_esm_2e3d71e2._.js")
+R.c("server/chunks/6021d_next_dist_compiled_ee24ddd9._.js")
+R.c("server/chunks/6021d_next_dist_server_a85eebca._.js")
+R.c("server/chunks/6021d_next_dist_1453cafd._.js")
+R.c("server/chunks/6021d_next_277930c4._.js")
+R.c("server/chunks/97041_undici_8eaac62d._.js")
+R.c("server/chunks/db598__pnpm_5a7e68b5._.js")
+R.c("server/chunks/[root-of-the-server]__d6871c0e._.js")
+R.c("server/chunks/b1735_the-sanctum__next-internal_server_app_api_admin_summary_route_actions_feefa9f3.js")
+R.m("[project]/OneDrive/Desktop/the-sanctum/node_modules/.pnpm/next@15.6.0-canary.60_react_60c2d962eb59e8fdc3ce5782532c32a4/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/OneDrive/Desktop/the-sanctum/app/api/admin/summary/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/OneDrive/Desktop/the-sanctum/node_modules/.pnpm/next@15.6.0-canary.60_react_60c2d962eb59e8fdc3ce5782532c32a4/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/OneDrive/Desktop/the-sanctum/app/api/admin/summary/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

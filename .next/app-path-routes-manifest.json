@@ -1,0 +1,23 @@
+{
+  "/[page]/opengraph-image/route": "/[page]/opengraph-image",
+  "/[page]/page": "/[page]",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/account/page": "/account",
+  "/admin/design/page": "/admin/design",
+  "/admin/login/page": "/admin/login",
+  "/admin/page": "/admin",
+  "/api/admin/summary/route": "/api/admin/summary",
+  "/api/admin/upload/route": "/api/admin/upload",
+  "/api/revalidate/route": "/api/revalidate",
+  "/checkout/page": "/checkout",
+  "/favicon.ico/route": "/favicon.ico",
+  "/opengraph-image/route": "/opengraph-image",
+  "/page": "/",
+  "/product/[handle]/page": "/product/[handle]",
+  "/robots.txt/route": "/robots.txt",
+  "/search/[collection]/opengraph-image/route": "/search/[collection]/opengraph-image",
+  "/search/[collection]/page": "/search/[collection]",
+  "/search/page": "/search",
+  "/sitemap.xml/route": "/sitemap.xml"
+}

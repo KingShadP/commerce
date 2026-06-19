@@ -1,0 +1,10 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/admin/summary/route.js")
+R.c("server/chunks/[root-of-the-server]__c23ae519._.js")
+R.c("server/chunks/6021d_next_8477b154._.js")
+R.c("server/chunks/6021d_next_dist_esm_build_templates_app-route_433b7ea9.js")
+R.c("server/chunks/[root-of-the-server]__c30e6b25._.js")
+R.c("server/chunks/OneDrive_Desktop_the-sanctum_151f4c2e._.js")
+R.c("server/chunks/OneDrive_Desktop_the-sanctum_54d8462f._.js")
+R.c("server/chunks/b1735_the-sanctum__next-internal_server_app_api_admin_summary_route_actions_feefa9f3.js")
+R.m(36486)
+module.exports=R.m(36486).exports
